@@ -25,16 +25,12 @@
       a: 'Jonnel helps with: administrative and virtual assistance; data management and documentation; order and supply chain coordination; due diligence, credentialing and risk review; customer and stakeholder support; and digital tools and process support. Details are in the <a href="/#services">Services</a> section.',
       next: ['Do you do data entry?', 'Supply chain experience?', 'Are you open to freelance work?'] },
 
-    { id: 'experience', keys: ['experience', 'background', 'years', 'career', 'history', 'worked', 'work history', 'resume', 'cv'],
-      a: 'More than six years in BPO and shared services, mostly with US clients, across healthcare, supply chain, logistics and telecom. He started as a data encoder at 18 and has worked as a data assistant, customer service representative, supply chain coordinator, and now a sales support analyst at RELX. See the full <a href="/#experience">timeline</a>. For a r&eacute;sum&eacute;, please email and it will be sent over.',
-      next: ['What is your current role?', 'What tools do you use?'] },
-
-    { id: 'current', keys: ['current', 'currently', 'right now', 'relx', 'present job', 'now'],
-      a: 'Since March 2025, Jonnel has been a Sales Support Analyst at RELX (Reed Elsevier PH), doing credentialing, risk assessment and due diligence: verifying documents, checking compliance, and spotting discrepancies.',
-      next: ['Supply chain experience?', 'What tools do you use?'] },
+    { id: 'experience', keys: ['experience', 'background', 'years', 'career', 'history', 'worked', 'work history', 'resume', 'cv', 'confidential', 'employer', 'employers', 'company', 'companies', 'previous', 'where did you work', 'current role', 'current job', 'currently'],
+      a: 'Jonnel has 6+ years in BPO and shared services, mostly with US clients, across healthcare, supply chain, logistics and telecom: data encoding, data assistance, customer support, supply chain coordination, and now due diligence, credentialing and risk review. The detailed history involves past employers and clients, so it&rsquo;s confidential and shared on request. <a href="/experience.html">Request to view it</a>.',
+      next: ['Can I see your work history?', 'What tools do you use?'] },
 
     { id: 'supply', keys: ['supply chain', 'logistics', 'orders', 'order', 'warehouse', 'pod', 'bol', 'coordinator', 'shipping', 'delivery'],
-      a: 'From Dec 2022 to Jan 2025 Jonnel was a Supply Chain Coordinator at Acquire Intelligence: tracking bulk orders, coordinating retailers, warehouses and logistics partners, and securing PODs and BOLs so suppliers and customers had accurate information on time.',
+      a: 'Yes. Jonnel has worked as a supply chain coordinator: tracking bulk orders end to end, coordinating retailers, warehouses and logistics partners, and securing PODs and BOLs so suppliers and customers get accurate information on time.',
       next: ['Do you do data entry?', 'What tools do you use?'] },
 
     { id: 'data', keys: ['data', 'data entry', 'encoding', 'encoder', 'excel', 'spreadsheet', 'records', 'documentation', 'clean'],
@@ -42,15 +38,15 @@
       next: ['Tell me about your experience', 'What tools do you use?'] },
 
     { id: 'risk', keys: ['risk', 'compliance', 'due diligence', 'credentialing', 'verification', 'verify'],
-      a: 'At RELX he handles due diligence and credentialing: document verification, compliance checks, finding risks and discrepancies, and keeping accurate records.',
-      next: ['What is your current role?', 'How can I contact you?'] },
+      a: 'Due diligence and credentialing are his current focus: document verification, compliance checks, finding risks and discrepancies, and keeping accurate records.',
+      next: ['Can I see your work history?', 'How can I contact you?'] },
 
-    { id: 'tools', keys: ['tools', 'tool', 'software', 'systems', 'tech', 'skills', 'salesforce', 'oracle', 'slack', 'microsoft', 'google workspace', 'ai', 'claude', 'copilot', 'gemini', 'erp', 'crm', 'tms'],
-      a: 'Microsoft 365, Google Workspace, Slack, Lark, Confluence; Salesforce, Oracle, E2open, Blujay, OpenDock, ServiceNow; AI assistants like Claude, Gemini and Copilot; plus HTML/CSS and VS Code. Laravel and VBA are basic-level. Full list in <a href="/#tools">Tools</a>.',
+    { id: 'tools', keys: ['tools', 'tool', 'software', 'systems', 'tech', 'skills', 'salesforce', 'oracle', 'slack', 'microsoft', 'google workspace', 'ai', 'claude', 'chatgpt', 'copilot', 'gemini', 'erp', 'crm', 'tms', 'power platform', 'apps script', 'javascript', 'vba'],
+      a: 'Microsoft 365 and Power Platform, Google Workspace and Apps Script, Slack and Confluence; business systems such as Salesforce, Oracle, E2open, ServiceNow and Workday; AI assistants like Claude, ChatGPT, Gemini and Copilot; plus JavaScript, HTML/CSS and VS Code. Laravel and VBA are basic-level. See the full list on the <a href="/tools.html">tools page</a>.',
       next: ['Tell me about your projects', 'What services do you offer?'] },
 
-    { id: 'projects', keys: ['project', 'projects', 'pos', 'point of sale', 'portfolio', 'built', 'build', 'app', 'retailer', 'pdf merger', 'template', 'docx', 'generator'],
-      a: 'Jonnel built <a href="/projects/retailer-pos.html">Retailer POS</a>, a web-based point-of-sale and business management app. A PDF merger, a letter/template generator and a DOCX generator are planned. See <a href="/#projects">Projects</a>.',
+    { id: 'projects', keys: ['project', 'projects', 'pos', 'point of sale', 'portfolio', 'built', 'build', 'app', 'retailer', 'pdf merger', 'template', 'docx', 'generator', 'extractor'],
+      a: 'Jonnel built <a href="/projects/retailer-pos.html">Retailer POS</a>, a web-based point-of-sale and business management app. Planned next: a letter &amp; document generator, a PDF merger, and a PDF &amp; document extractor. See <a href="/#projects">Projects</a>.',
       next: ['What services do you offer?', 'How can I contact you?'] },
 
     { id: 'hire', keys: ['hire', 'hiring', 'available', 'availability', 'freelance', 'remote', 'full time', 'full-time', 'part time', 'part-time', 'in-house', 'team', 'job', 'opportunity', 'work with you', 'start'],

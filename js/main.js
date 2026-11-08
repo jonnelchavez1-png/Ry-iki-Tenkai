@@ -25,6 +25,32 @@
     });
   }
 
+  // Tools strip: scrolls left to right, pauses on hover/focus or with the button
+  var marquee = document.querySelector('.marquee');
+  if (marquee) {
+    var inner = marquee.querySelector('.marquee-inner');
+    var track = marquee.querySelector('.marquee-track');
+    var pauseBtn = marquee.querySelector('.marquee-pause');
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (inner && track && !reduce) {
+      var copy = track.cloneNode(true);
+      copy.setAttribute('aria-hidden', 'true');
+      copy.setAttribute('inert', '');
+      inner.appendChild(copy);
+    }
+    if (pauseBtn) {
+      if (reduce) {
+        pauseBtn.hidden = true;
+      } else {
+        pauseBtn.addEventListener('click', function () {
+          var paused = marquee.classList.toggle('is-paused');
+          pauseBtn.setAttribute('aria-pressed', String(paused));
+          pauseBtn.textContent = paused ? 'Resume scrolling' : 'Pause scrolling';
+        });
+      }
+    }
+  }
+
   // Gentle reveal on scroll (CSS keeps everything visible if this doesn't run)
   var items = document.querySelectorAll('.reveal');
   if (!('IntersectionObserver' in window)) {
