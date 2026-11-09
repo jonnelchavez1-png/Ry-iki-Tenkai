@@ -587,3 +587,8 @@ body:has(dialog[open]) { overflow: hidden; }
 .marquee-bar:hover .marquee-thumb, .marquee-bar.is-dragging .marquee-thumb { background: var(--blue-700, #0f5a8a); }
 .marquee-bar.is-dragging .marquee-thumb { cursor: grabbing; }
 .marquee-bar:focus-visible { outline: 2px solid var(--blue-700, #0f5a8a); outline-offset: 3px; }
+
+.chat-msg.typing { color: #5b6b7a; font-style: italic; }
+.chat-head span { display: block; }
+
+@media (max-width: 520px) { .chat-chips { flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden; max-height: none; padding-bottom: 0.5rem; } .chat-chips button { flex: 0 0 auto; white-space: nowrap; } }
