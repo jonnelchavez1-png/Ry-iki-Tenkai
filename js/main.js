@@ -53,6 +53,47 @@
       ['pointerdown', 'wheel', 'touchstart', 'keydown'].forEach(function (ev) { viewport.addEventListener(ev, touch, { passive: true }); });
       viewport.addEventListener('pointerenter', function (e) { hovering = e.pointerType === 'mouse'; });
       viewport.addEventListener('pointerleave', function () { hovering = false; });
+      // Scroll bar that is always visible (drag it, or click the track). It shows where you are in the looped strip.
+      var bar = document.createElement('div');
+      bar.className = 'marquee-bar';
+      bar.setAttribute('role', 'scrollbar');
+      bar.setAttribute('aria-controls', 'marquee-viewport');
+      bar.setAttribute('aria-orientation', 'horizontal');
+      bar.setAttribute('aria-label', 'Scroll the tools list');
+      bar.tabIndex = -1;
+      var thumb = document.createElement('div');
+      thumb.className = 'marquee-thumb';
+      bar.appendChild(thumb);
+      viewport.id = 'marquee-viewport';
+      viewport.parentNode.insertBefore(bar, viewport.nextSibling);
+      marquee.classList.add('has-bar');
+      var layoutBar = function () {
+        var h = half(); if (!h) return;
+        var w = bar.clientWidth, tw = Math.max(48, Math.min(w, w * viewport.clientWidth / h));
+        thumb.style.width = tw + 'px';
+        var frac = (((viewport.scrollLeft % h) + h) % h) / h;
+        thumb.style.transform = 'translateX(' + (frac * (w - tw)) + 'px)';
+        bar.setAttribute('aria-valuenow', String(Math.round(frac * 100)));
+      };
+      viewport.addEventListener('scroll', layoutBar, { passive: true });
+      window.addEventListener('resize', layoutBar);
+      var dragging = false, grab = 0;
+      var moveTo = function (clientX) {
+        var h = half(), w = bar.clientWidth, tw = thumb.offsetWidth, r = bar.getBoundingClientRect();
+        var x = Math.min(Math.max(clientX - r.left - grab, 0), w - tw);
+        viewport.scrollLeft = (x / Math.max(w - tw, 1)) * h; pos = viewport.scrollLeft; touch();
+      };
+      bar.addEventListener('pointerdown', function (e) {
+        dragging = true; touch(); bar.classList.add('is-dragging'); bar.setPointerCapture(e.pointerId);
+        var t = thumb.getBoundingClientRect();
+        grab = (e.clientX >= t.left && e.clientX <= t.right) ? e.clientX - t.left : t.width / 2;
+        moveTo(e.clientX); e.preventDefault();
+      });
+      bar.addEventListener('pointermove', function (e) { if (dragging) moveTo(e.clientX); });
+      var endDrag = function () { dragging = false; bar.classList.remove('is-dragging'); touch(); };
+      bar.addEventListener('pointerup', endDrag); bar.addEventListener('pointercancel', endDrag);
+      layoutBar();
+
       var tick = function (now) {
         var dt = Math.min((now - last) / 1000, 0.1); last = now;
         var h = half();

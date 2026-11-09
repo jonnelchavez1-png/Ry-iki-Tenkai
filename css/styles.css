@@ -575,3 +575,15 @@ body:has(dialog[open]) { overflow: hidden; }
 
 .workshop li.wide { grid-column: 1 / -1; }
 .workshop li.wide p + p { margin-top: 0.6rem; }
+
+.workshop li span.tag-live { color: #1b6b3a; }
+.workshop li p a { color: var(--blue-700, #0f5a8a); font-weight: 600; }
+
+/* ---- Always-visible scroll bar under the tools strip (native bars hide themselves on phones and Macs) ---- */
+.marquee.has-bar .marquee-viewport { scrollbar-width: none; padding-bottom: 0.5rem; }
+.marquee.has-bar .marquee-viewport::-webkit-scrollbar { display: none; }
+.marquee-bar { position: relative; height: 0.9rem; margin: 0.35rem 0 0; background: var(--line, #d9d6cc); border-radius: 0.45rem; touch-action: none; cursor: pointer; }
+.marquee-thumb { position: absolute; top: 0; left: 0; height: 100%; min-width: 3rem; background: var(--navy-800, #0f2744); border-radius: 0.45rem; cursor: grab; }
+.marquee-bar:hover .marquee-thumb, .marquee-bar.is-dragging .marquee-thumb { background: var(--blue-700, #0f5a8a); }
+.marquee-bar.is-dragging .marquee-thumb { cursor: grabbing; }
+.marquee-bar:focus-visible { outline: 2px solid var(--blue-700, #0f5a8a); outline-offset: 3px; }
