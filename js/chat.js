@@ -130,6 +130,39 @@
       a: 'Following things through is his habit: when an order is delayed or a document is missing, he takes ownership, follows up and escalates to the right people until it&rsquo;s closed. That is the order and supply chain coordination and customer support part of his work.',
       next: ['Supply chain experience?', 'How can I contact you?'] },
 
+    // ---- about Jonnel as a person (third person, grounded in "My approach" and "How I can help") ----
+    { id: 'person', keys: ['personality', 'character', 'what kind of person', 'what is he like', 'what is jonnel like', 'what are you like', 'describe him', 'describe jonnel', 'describe yourself', 'who is jonnel', 'tell me about jonnel', 'tell me about him', 'tell me about yourself', 'about the person', 'about him', 'strength', 'best quality', 'qualities', 'quality', 'traits', 'trait', 'work habit', 'work style', 'work ethic', 'how does he work', 'how do you work', 'working with him', 'working with you', 'what is it like to work', 'soft skill', 'values', 'mindset', 'attitude', 'team player', 'good fit', 'why hire', 'why should i', 'stand out', 'different from', 'what makes him'],
+      a: 'Jonnel is someone who sees things through. When an order is delayed or a document is missing, he takes ownership, follows up, and escalates to the right people until it&rsquo;s closed. He&rsquo;s also curious: he learns how a system works, sees how the pieces connect, then looks for what would make the work simpler, which is why he sometimes ends up building a small tool for it. And after years of reviewing claims and running due diligence checks, he reads documents closely and flags what doesn&rsquo;t add up.<br><br>Want a closer look at one side of him?',
+      next: ['How does he learn new systems?', 'How does he handle problems?', 'How does he communicate?', 'Is he detail-oriented?'] },
+
+    { id: 'p-learn', keys: ['learn', 'learner', 'learning', 'curious', 'curiosity', 'adapt', 'adaptable', 'adaptability', 'new system', 'new tool', 'new software', 'pick up', 'quick learner', 'fast learner', 'grow', 'training', 'keep up', 'ai enthusiast', 'how does he learn'],
+      a: 'He learns by using things. He has worked in many business systems (CRM, ERP, TMS, ticketing) and picked up AI tools to speed up routine work, and he keeps up with AI and automation through courses and videos, then tests what he learns on real tasks so it turns into something useful. With his IT background, when a task keeps coming back he&rsquo;ll build a small tool for it. <a href="/#projects">AnyJuanPOS and the receipt tracker</a> are examples.',
+      next: ['What tools do you use?', 'Tell me about your projects', 'How does he handle problems?'] },
+
+    { id: 'p-detail', keys: ['detail', 'detail oriented', 'detail-oriented', 'attention to detail', 'careful', 'accurate', 'accuracy', 'mistake', 'error', 'thorough', 'meticulous', 'proofread', 'quality of work'],
+      a: 'Yes, and it comes from the work. Reviewing insurance claims, tracking paperwork, and running due diligence checks taught him to read a document closely and flag what doesn&rsquo;t add up before it becomes a problem. He also proofreads his own work before it goes out.',
+      next: ['Is he reliable?', 'Tell me about your experience', 'How does he handle problems?'] },
+
+    { id: 'p-owner', keys: ['reliable', 'dependable', 'accountable', 'accountability', 'ownership', 'responsible', 'responsibility', 'follow through', 'follow-through', 'initiative', 'proactive', 'trust', 'trustworthy', 'integrity', 'honest', 'is he reliable'],
+      a: 'When an order is delayed or a document is missing, he takes ownership: he follows up, tries to resolve it, and escalates to the right people instead of assuming someone else will. He also handles sensitive information (claims, invoices, credentials, client records) with care, which is why details about past employers and clients are shared on request, not posted.',
+      next: ['Is he detail-oriented?', 'How does he handle problems?', 'How can I contact you?'] },
+
+    { id: 'p-challenge', keys: ['challenge', 'pressure', 'stress', 'problem solving', 'problem-solving', 'solve problems', 'difficult', 'tough', 'conflict', 'angry customer', 'upset customer', 'under pressure', 'how does he handle', 'handle problems', 'handle issues', 'deadline', 'busy'],
+      a: 'His habit is to find out where something is stuck, update the people waiting, and escalate to the right team instead of letting it sit. He has handled disputes calmly in customer support, and coordinating retailers, warehouses and 3PLs taught him that one late step affects the next, so he looks for where work slows down and what would make it smoother.',
+      next: ['How does he communicate?', 'Supply chain experience?', 'Is he reliable?'] },
+
+    { id: 'p-comm', keys: ['communicate', 'communicates', 'communication', 'communicator', 'soft skills', 'english', 'talk to clients', 'customer handling', 'tone', 'how does he communicate', 'how does he talk', 'explain things'],
+      a: 'Plainly and professionally. Years of calls, chats and emails with US customers, onshore and offshore teams, and partners such as retailers, suppliers, landlords, 3PLs, hospitals and doctors taught him to read different communication styles, adjust his tone, set expectations, and keep everyone updated until the issue is resolved.',
+      next: ['How does he handle problems?', 'Tell me about your experience', 'How can I contact you?'] },
+
+    { id: 'p-process', keys: ['process', 'improve', 'improvement', 'efficient', 'efficiency', 'streamline', 'simplify', 'better way', 'think in processes', 'workflow'],
+      a: 'He thinks in processes. Coordinating with retailers, warehouses and 3PLs showed him how each step connects to and affects the next, so he looks for where the work slows down and what would make it simpler. Sometimes the answer is a better routine, and sometimes it&rsquo;s a small tool or automation built for the job.',
+      next: ['Tell me about your projects', 'What services do you offer?', ASK_BUSINESS] },
+
+    { id: 'p-weak', keys: ['weakness', 'weaknesses', 'flaw', 'flaws', 'weak point', 'bad at', 'not good at', 'areas to improve', 'improve on', 'downside', 'limitation', 'limitations'],
+      a: 'I only know what&rsquo;s on this site, and it doesn&rsquo;t list weaknesses. One honest data point: some skills are still at a basic level, such as Laravel and VBA, and he says so. He keeps learning, but for a straight answer about how he sees his own growth areas, ask him directly: <a href="mailto:' + EMAIL + '">' + EMAIL + '</a>.',
+      next: ['How does he learn new systems?', 'How can I contact you?'] },
+
     { id: 'hire', keys: ['hire', 'hiring', 'available', 'availability', 'freelance', 'remote', 'full time', 'part time', 'in-house', 'team', 'job', 'opportunity', 'work with you', 'work together', 'start', 'engage', 'recruit'],
       a: 'Yes. Jonnel is looking for remote work, either in-house with a company or directly with a client, and is open to freelance projects. For availability and start dates, the quickest route is email or a call.',
       next: ['How can I contact you?', ASK_BUSINESS] },
@@ -265,6 +298,8 @@
     var businessTalk = /\b(i|we)\b.{0,12}\b(run|own|have|manage|operate|work|am in|are in|sell|start|started|do)\b|\bmy (business|shop|store|company|clinic|restaurant|startup|office|team)\b|\bour (business|shop|store|company|clinic|restaurant|office)\b|\bi'?m a\b/.test(c);
     if (state.askBusiness || businessTalk || BUSINESS_CHIPS.indexOf(text) !== -1) {
       var b = bestOf(BUSINESSES, text);
+      // a clear question about something else wins over a weak business guess
+      if (b.item && !businessTalk && BUSINESS_CHIPS.indexOf(text) === -1 && bestOf(INTENTS, text).score >= b.score) b = { item: null, score: 0 };
       if (b.item && b.score >= 1) {
         state.askBusiness = false; state.askPain = true; state.business = b.item.id;
         return { html: 'Thanks, that helps. ' + b.item.a + '<br><br>What slows you down the most right now? Pick one or tell me in your own words.', next: PAIN_CHIPS };
