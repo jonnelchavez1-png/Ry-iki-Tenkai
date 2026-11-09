@@ -6,9 +6,11 @@ Static portfolio site (plain HTML, CSS, and a little JavaScript). No build step,
 
 ```
 index.html                 Home page (hero, about, services, experience, projects, tools, approach, contact)
-projects/retailer-pos.html Project detail page (copy this file for each new project)
-css/styles.css             All styles; colors and fonts are CSS variables at the top
-js/main.js                 Mobile menu, footer year, scroll reveal
+projects/anyjuanpos.html   Project detail page (copy this file for each new project)
+css/styles.css             All styles (one file); colors and fonts are CSS variables at the top
+js/main.js                 Mobile menu, footer year, scroll reveal, tools strip
+js/chat.js                 The "Ask a question" chatbox (answers are written in this file)
+_redirects                 Old address /projects/retailer-pos -> /projects/anyjuanpos
 assets/                    Images and favicon
 _headers                   Cloudflare Pages headers (security + caching)
 robots.txt, sitemap.xml    SEO
@@ -25,7 +27,7 @@ Every push to the main branch redeploys automatically.
 
 ## Adding pictures
 
-Look for `class="media-slot"` in `index.html` (the photo strip under About) and `projects/retailer-pos.html` (screenshot gallery). To fill one:
+Look for `class="media-slot"` in `index.html` (the photo strip under About) and `projects/anyjuanpos.html` (screenshot gallery). To fill one:
 
 ```html
 <figure class="media-slot has-image">
@@ -38,7 +40,7 @@ Only use sample data in screenshots, never real customer records, emails, or cre
 
 ## Adding a project
 
-1. Copy `projects/retailer-pos.html` to `projects/your-project.html` and edit the text.
+1. Copy `projects/anyjuanpos.html` to `projects/your-project.html` and edit the text.
 2. In `index.html`, add a card in the Projects section that links to it (or move an item out of "In the workshop").
 3. Add the new URL to `sitemap.xml`.
 
