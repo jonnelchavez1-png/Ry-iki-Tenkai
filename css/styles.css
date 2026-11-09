@@ -475,23 +475,18 @@ em { font-style: italic; }
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
   mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
 }
-.js .marquee-viewport { overflow: hidden; }
+.js .marquee-viewport { overflow-x: auto; overflow-y: hidden; padding-bottom: 0.9rem; scrollbar-width: thin; scrollbar-color: var(--navy-700, #1d4f7c) var(--line, #d9d6cc); overscroll-behavior-x: contain; }
+.js .marquee-viewport::-webkit-scrollbar { height: 10px; }
+.js .marquee-viewport::-webkit-scrollbar-track { background: var(--line, #d9d6cc); border-radius: 5px; }
+.js .marquee-viewport::-webkit-scrollbar-thumb { background: var(--navy-700, #1d4f7c); border-radius: 5px; }
 .marquee-inner { display: flex; width: max-content; }
 .marquee-track { display: flex; gap: 1rem; margin: 0; padding: 0 0.5rem 0 0; list-style: none; }
-.js .marquee-inner { animation: marquee-ltr 90s linear infinite; will-change: transform; }
-@keyframes marquee-ltr { from { transform: translateX(-50%); } to { transform: translateX(0); } }
-/* Pauses only when the pointer is on the logos themselves (never on touch screens, where a tap would leave it stuck),
-   when a keyboard user focuses the strip, or when the Pause button is pressed. */
-.marquee.is-paused .marquee-inner { animation-play-state: paused; }
-.marquee-viewport:focus-visible .marquee-inner { animation-play-state: paused; }
-@media (hover: hover) and (pointer: fine) { .marquee-viewport:hover .marquee-inner { animation-play-state: paused; } }
+/* the strip drifts by itself (js/main.js moves its scroll position) and the visitor can drag the scrollbar, swipe, or use the arrow keys at any time */
 .marquee-foot { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.75rem 2rem; margin-top: 1.5rem; }
 .marquee-pause { font: inherit; font-size: 0.9rem; font-weight: 600; background: none; border: 1px solid var(--ink); color: var(--ink); padding: 0.55rem 1rem; min-height: 2.75rem; border-radius: 4px; cursor: pointer; }
 .marquee-pause:hover { background: var(--ink); color: #fff; }
 html:not(.js) .marquee-pause { display: none; }
 @media (prefers-reduced-motion: reduce) {
-  .js .marquee-inner { animation: none; }
-  .js .marquee-viewport { overflow-x: auto; }
   .marquee-pause { display: none; }
 }
 @media (max-width: 40rem) { .tile { width: 9.25rem; height: 5rem; } }
@@ -577,3 +572,6 @@ body:has(dialog[open]) { overflow: hidden; }
 }
 
 .workshop code { font-size: 0.88em; background: var(--blue-100, #e8f0f8); padding: 0.05em 0.35em; border-radius: 3px; }
+
+.workshop li.wide { grid-column: 1 / -1; }
+.workshop li.wide p + p { margin-top: 0.6rem; }
