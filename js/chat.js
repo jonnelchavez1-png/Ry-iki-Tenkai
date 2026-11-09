@@ -25,6 +25,7 @@
   var TOOLS = [
     { n: 'Salesforce', cat: 'CRM and customer support', al: ['salesforce'] },
     { n: 'Avaya', cat: 'CRM and customer support', al: ['avaya'] },
+    { n: 'Five9', cat: 'communication and contact center', al: ['five9', 'five 9'] },
     { n: 'ServiceNow', cat: 'CRM and customer support', al: ['servicenow', 'service now'] },
     { n: 'Oracle', cat: 'ERP and business systems', al: ['oracle'] },
     { n: 'Workday', cat: 'ERP and business systems', al: ['workday'] },
@@ -55,7 +56,7 @@
     '<strong>CRM and customer support:</strong> Salesforce, Avaya, ServiceNow.<br>' +
     '<strong>ERP and business systems:</strong> Oracle, Workday, Kronos.<br>' +
     '<strong>TMS and supply chain:</strong> E2open, BluJay, OpenDock.<br>' +
-    '<strong>Communication and collaboration:</strong> Slack, Lark, Confluence, Microsoft 365, Google Workspace, Citrix and VMware Horizon.<br>' +
+    '<strong>Communication and collaboration:</strong> Five9 (contact center), Slack, Lark, Confluence, Microsoft 365, Google Workspace, Citrix and VMware Horizon.<br>' +
     '<strong>Productivity and documentation:</strong> Excel (PivotTables, basic VBA), Word, Access.<br>' +
     '<strong>Automation and AI:</strong> Power Platform, Copilot Studio, Google Apps Script, Claude, ChatGPT, Gemini, Copilot.<br>' +
     '<strong>Small tools:</strong> JavaScript, HTML/CSS, VS Code; C++ and Laravel at a basic level.';
@@ -90,7 +91,7 @@
       next: ['Tell me about your experience', 'What tools do you use?'] },
 
     { id: 'risk', keys: ['risk', 'compliance', 'due diligence', 'credentialing', 'verification', 'verify', 'audit', 'discrepancy'],
-      a: 'Due diligence and credentialing are his current focus: document verification, compliance checks, finding risks and discrepancies, and keeping accurate records.',
+      a: 'Due diligence and credentialing are his current line of work, supporting sales teams: verifying documents, researching background information, checking compliance, and using available validation tools to spot discrepancies, so records stay accurate and audit-ready.',
       next: ['Can I see your work history?', 'How can I contact you?'] },
 
     // ---- tools: conversational, grouped by category, bigger picture, no tool names ----
