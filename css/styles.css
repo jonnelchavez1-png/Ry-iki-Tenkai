@@ -592,3 +592,27 @@ body:has(dialog[open]) { overflow: hidden; }
 .chat-head span { display: block; }
 
 @media (max-width: 520px) { .chat-chips { flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden; max-height: none; padding-bottom: 0.5rem; } .chat-chips button { flex: 0 0 auto; white-space: nowrap; } }
+
+/* ---- AnyJuanPOS screenshots gallery + picture viewer ---- */
+.shots-note { margin: 0 0 1.25rem; color: var(--muted); font-size: 0.98rem; }
+.gallery.shots { gap: clamp(1rem, 2.4vw, 1.6rem); }
+.shot-fig { margin: 0; min-width: 0; }
+.shot-fig.wide { grid-column: 1 / -1; }
+.shot-fig a { display: block; overflow: hidden; border-radius: 4px; background: var(--navy-900); box-shadow: 0 1px 0 var(--line), 0 10px 28px -16px rgba(7, 27, 47, 0.45); cursor: zoom-in; }
+.shot-fig img { display: block; width: 100%; height: auto; transition: transform 0.4s ease; }
+.shot-fig a:hover img, .shot-fig a:focus-visible img { transform: scale(1.02); }
+.shot-fig a:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+.shot-fig figcaption { margin-top: 0.6rem; font-size: 0.9rem; line-height: 1.45; color: var(--muted); }
+.shots-sub { margin: clamp(2rem, 4vw, 3rem) 0 1rem; font-size: 1.15rem; }
+.phone-row { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(0.75rem, 2vw, 1.25rem); align-items: start; }
+.phone-row .shot-fig a { border-radius: 14px; }
+@media (max-width: 760px) { .phone-row { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (prefers-reduced-motion: reduce) { .shot-fig img { transition: none; } .shot-fig a:hover img { transform: none; } }
+
+.lightbox { border: 0; padding: 0.75rem; max-width: min(96vw, 1500px); max-height: 94vh; background: var(--paper, #fff); border-radius: 6px; overflow: auto; }
+.lightbox::backdrop { background: rgba(7, 27, 47, 0.82); backdrop-filter: blur(3px); }
+.lightbox img { display: block; max-width: 100%; max-height: 80vh; width: auto; height: auto; margin: 0 auto; }
+.lightbox-cap { margin: 0.6rem 0.25rem 0.1rem; font-size: 0.92rem; color: var(--muted); }
+.lightbox-close { position: absolute; top: 0.4rem; right: 0.4rem; margin: 0; z-index: 1; }
+.lightbox-close button { width: 2.75rem; height: 2.75rem; border: 0; border-radius: 50%; background: rgba(7, 27, 47, 0.78); color: #fff; font-size: 1.7rem; line-height: 1; cursor: pointer; }
+.lightbox-close button:hover { background: var(--navy-900); }
