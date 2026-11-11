@@ -23,6 +23,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&amp;family=Hanken+Grotesk:wght@400;500;600;700&amp;display=swap">
   <link rel="stylesheet" href="/css/styles.css?v=7">
+  <link rel="stylesheet" href="/css/photo-grid.css?v=20261111">
 
   <script type="application/ld+json">
   {
@@ -122,12 +123,8 @@
           </dl>
         </div>
 
-        <!-- Free space for pictures: replace the <span> with <img src="/assets/your-photo.webp" alt="..." loading="lazy"> and add class "has-image" to the figure. Delete the whole strip if you don't want it. -->
-        <div class="photo-strip reveal">
-          <figure class="media-slot"><span>Photo space &mdash; add a workspace or work-in-progress picture</span></figure>
-          <figure class="media-slot"><span>Photo space</span></figure>
-          <figure class="media-slot"><span>Photo space</span></figure>
-        </div>
+        <!-- Randomized photo grid (js/photo-grid.js, css/photo-grid.css). Add, remove or replace photos in /assets/photo-grid/photos.json -->
+        <div class="photo-grid reveal" data-photo-grid data-src="/assets/photo-grid/photos.json" data-cells="12" data-min="450" data-max="900" role="group" aria-label="Photo gallery"></div>
       </div>
     </section>
 
@@ -453,5 +450,6 @@
 
   <script src="/js/main.js?v=6" defer></script>
   <script src="/js/chat.js?v=6" defer></script>
+  <script src="/js/photo-grid.js?v=20261111" defer></script>
 </body>
 </html>

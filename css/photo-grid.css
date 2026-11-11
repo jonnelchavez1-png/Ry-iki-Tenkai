@@ -1,0 +1,37 @@
+/* Infinite randomized photo grid (js/photo-grid.js). Everything is scoped to .photo-grid / .pg-* */
+.photo-grid {
+  --pg-cols: 6;
+  --pg-gap: clamp(0.3rem, 0.8vw, 0.6rem);
+  --pg-fade: 400ms;               /* keep shorter than data-min (450ms) in the markup */
+  display: grid;
+  grid-template-columns: repeat(var(--pg-cols), minmax(0, 1fr));
+  gap: var(--pg-gap);
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+}
+
+.pg-cell {
+  position: relative; overflow: hidden; aspect-ratio: 4 / 3;
+  background: var(--paper-2); border-radius: 2px;
+  isolation: isolate;
+}
+/* hairline frame above the photos */
+.pg-cell::after {
+  content: ""; position: absolute; inset: 0; z-index: 5; pointer-events: none;
+  box-shadow: inset 0 0 0 1px rgba(11, 26, 42, 0.08); border-radius: inherit;
+}
+
+.pg-img {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  opacity: 0; transition: opacity var(--pg-fade) ease;
+  -webkit-user-drag: none; user-select: none;
+}
+.pg-img.is-enter { opacity: 0; z-index: 2; transition: none; }
+.pg-img.is-front { opacity: 1; z-index: 2; }
+.pg-img.is-back  { opacity: 1; z-index: 1; }
+.pg-img.no-fade  { transition: none; }
+
+@media (max-width: 64rem) { .photo-grid { --pg-cols: 4; } }   /* tablet */
+@media (max-width: 40rem) { .photo-grid { --pg-cols: 3; } }   /* mobile */
+
+@media (prefers-reduced-motion: reduce) { .pg-img { transition: none; } }
+@media print { .photo-grid { display: none; } }
