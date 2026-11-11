@@ -1,92 +1,149 @@
 [
-  {
-    "src": "/assets/photo-grid/photo-01.webp"
-  },
-  {
-    "src": "/assets/photo-grid/photo-02.webp"
-  },
-  {
-    "src": "/assets/photo-grid/photo-03.webp"
-  },
-  {
-    "src": "/assets/photo-grid/photo-04.webp"
-  },
-  {
-    "src": "/assets/photo-grid/photo-05.webp"
-  },
-  {
-    "src": "/assets/photo-grid/photo-06.webp"
-  },
-  {
-    "src": "/assets/photo-grid/photo-07.webp"
-  },
-  {
-    "src": "/assets/photo-grid/photo-08.webp"
-  },
-  {
-    "src": "/assets/photo-grid/photo-09.webp"
-  },
-  {
-    "src": "/assets/photo-grid/photo-10.webp"
-  },
-  {
-    "src": "/assets/photo-grid/photo-11.webp"
-  },
-  {
-    "src": "/assets/photo-grid/photo-12.webp"
-  },
-  {
-    "src": "/assets/photo-grid/photo-13.webp"
-  },
-  {
-    "src": "/assets/photo-grid/photo-14.webp"
-  },
-  {
-    "src": "/assets/photo-grid/photo-15.webp"
-  },
-  {
-    "src": "/assets/photo-grid/photo-16.webp"
-  },
-  {
-    "src": "/assets/photo-grid/photo-17.webp"
-  },
-  {
-    "src": "/assets/photo-grid/photo-18.webp"
-  },
-  {
-    "src": "/assets/photo-grid/photo-19.webp"
-  },
-  {
-    "src": "/assets/photo-grid/photo-20.webp"
-  },
-  {
-    "src": "/assets/photo-grid/photo-21.webp"
-  },
-  {
-    "src": "/assets/photo-grid/photo-22.webp"
-  },
-  {
-    "src": "/assets/photo-grid/photo-23.webp"
-  },
-  {
-    "src": "/assets/photo-grid/photo-24.webp"
-  },
-  {
-    "src": "/assets/photo-grid/photo-25.webp"
-  },
-  {
-    "src": "/assets/photo-grid/photo-26.webp"
-  },
-  {
-    "src": "/assets/photo-grid/photo-27.webp"
-  },
-  {
-    "src": "/assets/photo-grid/photo-28.webp"
-  },
-  {
-    "src": "/assets/photo-grid/photo-29.webp"
-  },
-  {
-    "src": "/assets/photo-grid/photo-30.webp"
-  }
+ {
+  "src": "/assets/photo-grid/photo-01.webp",
+  "focus": "50% 45%",
+  "lg": "/assets/photo-grid/photo-01-lg.webp"
+ },
+ {
+  "src": "/assets/photo-grid/photo-02.webp",
+  "focus": "50% 35%",
+  "lg": "/assets/photo-grid/photo-02-lg.webp"
+ },
+ {
+  "src": "/assets/photo-grid/photo-03.webp",
+  "focus": "50% 55%",
+  "lg": "/assets/photo-grid/photo-03-lg.webp"
+ },
+ {
+  "src": "/assets/photo-grid/photo-04.webp",
+  "focus": "50% 50%",
+  "lg": "/assets/photo-grid/photo-04-lg.webp"
+ },
+ {
+  "src": "/assets/photo-grid/photo-05.webp",
+  "focus": "50% 45%",
+  "lg": "/assets/photo-grid/photo-05-lg.webp"
+ },
+ {
+  "src": "/assets/photo-grid/photo-06.webp",
+  "focus": "60% 40%",
+  "lg": "/assets/photo-grid/photo-06-lg.webp"
+ },
+ {
+  "src": "/assets/photo-grid/photo-07.webp",
+  "focus": "50% 40%",
+  "lg": "/assets/photo-grid/photo-07-lg.webp"
+ },
+ {
+  "src": "/assets/photo-grid/photo-08.webp",
+  "focus": "60% 45%",
+  "lg": "/assets/photo-grid/photo-08-lg.webp"
+ },
+ {
+  "src": "/assets/photo-grid/photo-09.webp",
+  "focus": "50% 70%",
+  "lg": "/assets/photo-grid/photo-09-lg.webp"
+ },
+ {
+  "src": "/assets/photo-grid/photo-10.webp",
+  "focus": "50% 55%",
+  "lg": "/assets/photo-grid/photo-10-lg.webp"
+ },
+ {
+  "src": "/assets/photo-grid/photo-11.webp",
+  "focus": "50% 40%",
+  "lg": "/assets/photo-grid/photo-11-lg.webp"
+ },
+ {
+  "src": "/assets/photo-grid/photo-12.webp",
+  "focus": "50% 55%",
+  "lg": "/assets/photo-grid/photo-12-lg.webp"
+ },
+ {
+  "src": "/assets/photo-grid/photo-13.webp",
+  "focus": "50% 40%",
+  "lg": "/assets/photo-grid/photo-13-lg.webp"
+ },
+ {
+  "src": "/assets/photo-grid/photo-14.webp",
+  "focus": "50% 55%",
+  "lg": "/assets/photo-grid/photo-14-lg.webp"
+ },
+ {
+  "src": "/assets/photo-grid/photo-15.webp",
+  "focus": "50% 45%",
+  "lg": "/assets/photo-grid/photo-15-lg.webp"
+ },
+ {
+  "src": "/assets/photo-grid/photo-16.webp",
+  "focus": "60% 75%",
+  "lg": "/assets/photo-grid/photo-16-lg.webp"
+ },
+ {
+  "src": "/assets/photo-grid/photo-17.webp",
+  "focus": "75% 55%"
+ },
+ {
+  "src": "/assets/photo-grid/photo-18.webp",
+  "focus": "70% 45%",
+  "lg": "/assets/photo-grid/photo-18-lg.webp"
+ },
+ {
+  "src": "/assets/photo-grid/photo-19.webp",
+  "focus": "50% 28%",
+  "lg": "/assets/photo-grid/photo-19-lg.webp"
+ },
+ {
+  "src": "/assets/photo-grid/photo-20.webp",
+  "focus": "50% 50%"
+ },
+ {
+  "src": "/assets/photo-grid/photo-21.webp",
+  "focus": "50% 55%",
+  "lg": "/assets/photo-grid/photo-21-lg.webp"
+ },
+ {
+  "src": "/assets/photo-grid/photo-22.webp",
+  "focus": "50% 38%",
+  "lg": "/assets/photo-grid/photo-22-lg.webp"
+ },
+ {
+  "src": "/assets/photo-grid/photo-23.webp",
+  "focus": "50% 50%",
+  "lg": "/assets/photo-grid/photo-23-lg.webp"
+ },
+ {
+  "src": "/assets/photo-grid/photo-24.webp",
+  "focus": "50% 50%",
+  "lg": "/assets/photo-grid/photo-24-lg.webp"
+ },
+ {
+  "src": "/assets/photo-grid/photo-25.webp",
+  "focus": "40% 45%"
+ },
+ {
+  "src": "/assets/photo-grid/photo-26.webp",
+  "focus": "50% 70%",
+  "lg": "/assets/photo-grid/photo-26-lg.webp"
+ },
+ {
+  "src": "/assets/photo-grid/photo-27.webp",
+  "focus": "50% 55%",
+  "lg": "/assets/photo-grid/photo-27-lg.webp"
+ },
+ {
+  "src": "/assets/photo-grid/photo-28.webp",
+  "focus": "50% 55%",
+  "lg": "/assets/photo-grid/photo-28-lg.webp"
+ },
+ {
+  "src": "/assets/photo-grid/photo-29.webp",
+  "focus": "50% 55%",
+  "lg": "/assets/photo-grid/photo-29-lg.webp"
+ },
+ {
+  "src": "/assets/photo-grid/photo-30.webp",
+  "focus": "50% 50%",
+  "lg": "/assets/photo-grid/photo-30-lg.webp"
+ }
 ]
