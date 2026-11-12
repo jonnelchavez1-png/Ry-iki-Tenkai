@@ -1,279 +1,429 @@
 /*
-  Infinite randomized photo grid.
+  Floating photo wall.
   Markup:  <div class="photo-grid" data-photo-grid data-src="/assets/photo-grid/photos.json"></div>
   Options (data attributes, all optional):
-    data-src    URL of a JSON list: [{ "src": "/assets/photo-grid/photo-01.webp", "alt": "optional" }, ...]
-    data-cells  number of cells (default 12; keep it a multiple of 12 so every row is full at 6, 4 and 3 columns)
-    data-min    shortest time a cell waits before switching, in ms (default 450)
-    data-max    longest time a cell waits before switching, in ms (default 900)
-  Crossfade length is the CSS variable --pg-fade in css/photo-grid.css. Keep it shorter than data-min.
-  Each cell owns two stacked <img> layers. The next picture is preloaded and decoded on the hidden layer,
-  then faded in over the visible one, so a cell is never blank. Cells run on their own timers.
-  The grid pauses while off screen, in a background tab, or when the visitor prefers reduced motion.
+    data-src    URL of a JSON list: [{ "src": "photo.webp", "lg": "bigger.webp", "full": "viewer.webp", "alt": "optional" }, ...]
+                src is used on the wall, full (or lg, or src) in the viewer.
+    data-cells  photos floating at once on a wide screen (default 12; tablet shows about 2/3 of it, phone about 1/2)
+    data-min    shortest wait between two replacements in ms (default 3000, values under 1500 are ignored)
+    data-max    longest wait between two replacements in ms (default 6000)
+  How it behaves:
+    - Each photo is a card that keeps its own shape (never cropped) and floats on its own CSS animation
+      (different speed, drift, tilt and zoom). Depth comes from three layers: far (small, soft), middle, near.
+    - Replacements are staggered: one photo fades out, and a moment later a different photo fades in at a
+      different free spot, while all the others keep floating. No photo is ever shown twice at once.
+    - Photos in the foreground get a warm mat frame, corner marks and a soft glow that moves from photo to photo.
+    - Tiny fireflies drift and blink behind the photos (count depends on screen size).
+    - Click or tap a photo to open the viewer (previous / next, X, Esc, click outside, swipe). Photos can also be
+      reached with Tab and opened with Enter or Space.
+    - Everything pauses off screen, in a background tab, while the viewer is open, with the Pause button,
+      and the wall stays still for visitors who prefer reduced motion. No animation loop: only CSS transforms.
 */
 (function () {
   'use strict';
 
   var reduceQuery = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
 
-  function rand(min, max) { return min + Math.random() * (max - min); }
+  var FADE = [700, 1200];                 // ms for a photo to fade in or out
+  var RECENT = 8;                         // a photo that just left is not brought back for this many replacements
+  var MAX_LIT = 2;                        // photos glowing at the same time
+  var DEPTHS = {                          // size = share of its slot, dur = float cycle in seconds, amp = drift in px,
+    far:  { size: 0.56, op: 0.7,  dur: [16, 21], amp: 7,  z: 1, mix: 0.3, mat: 0, tilt: 5 },     // mat = frame width in px,
+    mid:  { size: 0.78, op: 0.93, dur: [12, 16], amp: 11, z: 2, mix: 0.4, mat: 3, tilt: 4.5 },   // tilt = max rotation in degrees
+    near: { size: 1.04, op: 1,    dur: [9, 12],  amp: 15, z: 3, mix: 0.3, mat: 5, tilt: 3.2 }
+  };
+  var MODES = {                           // chosen by CSS (--fw-mode); cols x rows are the spots photos can float in
+    wide:  { cols: 5, rows: 3, share: 1,    k: 1,    calm: 1,   flies: 22 },
+    mid:   { cols: 4, rows: 3, share: 0.67, k: 1,    calm: 1,   flies: 14 },
+    small: { cols: 3, rows: 3, share: 0.5,  k: 1.15, calm: 0.6, flies: 8 }
+  };
+  var MATS = ['#f2e8d4', '#f4f2ee'];      // warm ivory and soft white frames
+
+  function rand(a, b) { return a + Math.random() * (b - a); }
+  function sign() { return Math.random() < 0.5 ? -1 : 1; }
+  function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
   function noop() {}
 
-  // Cinematic montage: every few seconds one photo is spotlighted on a large floating card, with a light streak.
-  var HERO_HOLD = 2300;                // ms a spotlight stays up
-  var HERO_GAP = [900, 1500];          // ms between spotlights (min, max)
+  /* ---------- image helpers ---------- */
+  var probes = {};
+  function probe(url) {                   // loads once, keeps only the size (the browser keeps the file cached)
+    if (!probes[url]) probes[url] = new Promise(function (resolve) {
+      var im = new Image();
+      im.onload = function () { resolve({ ok: true, w: im.naturalWidth, h: im.naturalHeight }); };
+      im.onerror = function () { resolve({ ok: false }); };
+      im.src = url;
+    });
+    return probes[url];
+  }
+  function warm(url) { var im = new Image(); im.src = url; }
 
+  /* ---------- viewer (lightbox) ---------- */
+  function createViewer(photos, onState, fallback) {
+    var dlg = null, img, count, idx = 0, opener = null, token = 0, sx = 0, sy = 0, lastSwipe = 0;
+
+    function big(p) { return p.full || p.lg || p.src; }
+    function inside(e) {                  // is the click on the picture itself (not on the empty space around it)?
+      var r = img.getBoundingClientRect(), nw = img.naturalWidth || 4, nh = img.naturalHeight || 3;
+      var s = Math.min(r.width / nw, r.height / nh), w = nw * s, h = nh * s;
+      var l = r.left + (r.width - w) / 2, t = r.top + (r.height - h) / 2;
+      return e.clientX >= l && e.clientX <= l + w && e.clientY >= t && e.clientY <= t + h;
+    }
+    function show(i) {
+      var n = photos.length, t = ++token, p;
+      idx = ((i % n) + n) % n; p = photos[idx];
+      img.alt = p.alt || ('Photo ' + (idx + 1) + ' of ' + n);
+      img.classList.remove('is-ready');   // the new photo fades in once it can be drawn
+      img.src = p.src;                    // small version is already cached, so something shows instantly
+      (img.decode ? img.decode().catch(noop) : Promise.resolve()).then(function () { if (t === token) img.classList.add('is-ready'); });
+      count.textContent = (idx + 1) + ' / ' + n;
+      var b = big(p);
+      if (b !== p.src) {                  // then swap in the large one when it has arrived
+        var im = new Image();
+        im.onload = function () { if (t === token) img.src = b; };
+        im.src = b;
+      }
+      warm(big(photos[(idx + 1) % n])); warm(big(photos[(idx - 1 + n) % n]));
+    }
+    function go(d) { show(idx + d); }
+    function build() {
+      dlg = document.createElement('dialog');
+      dlg.className = 'fw-lb';
+      dlg.setAttribute('aria-label', 'Photo viewer');
+      dlg.innerHTML =
+        '<button type="button" class="fw-lb-btn fw-lb-close" aria-label="Close viewer">&times;</button>' +
+        '<button type="button" class="fw-lb-btn fw-lb-prev" aria-label="Previous photo">&#8249;</button>' +
+        '<img class="fw-lb-img" alt="" draggable="false">' +
+        '<button type="button" class="fw-lb-btn fw-lb-next" aria-label="Next photo">&#8250;</button>' +
+        '<p class="fw-lb-count" aria-live="polite"></p>';
+      document.body.appendChild(dlg);
+      img = dlg.querySelector('.fw-lb-img'); count = dlg.querySelector('.fw-lb-count');
+      dlg.addEventListener('click', function (e) {
+        if (Date.now() - lastSwipe < 400) return;           // the end of a swipe is not a click
+        var t = e.target;
+        if (t.closest('.fw-lb-close')) dlg.close();
+        else if (t.closest('.fw-lb-prev')) go(-1);
+        else if (t.closest('.fw-lb-next')) go(1);
+        else if (t !== img || !inside(e)) dlg.close();      // click outside the photo
+      });
+      dlg.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); }
+        else if (e.key === 'ArrowRight') { e.preventDefault(); go(1); }
+      });
+      dlg.addEventListener('pointerdown', function (e) { sx = e.clientX; sy = e.clientY; });
+      dlg.addEventListener('pointerup', function (e) {
+        var dx = e.clientX - sx, dy = e.clientY - sy;
+        if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) { lastSwipe = Date.now(); go(dx < 0 ? 1 : -1); }
+      });
+      dlg.addEventListener('close', function () {
+        onState(false);
+        img.removeAttribute('src'); img.classList.remove('is-ready');
+        var back = opener && opener.isConnected ? opener : (fallback && fallback());
+        if (back && back.focus) back.focus();
+      });
+    }
+    return {
+      open: function (i, from) {
+        if (typeof dlg === 'undefined' || !dlg) build();
+        if (typeof dlg.showModal !== 'function') return;
+        opener = from || document.activeElement;
+        show(i);
+        if (!dlg.open) dlg.showModal();
+        onState(true);
+      },
+      destroy: function () { if (dlg && dlg.parentNode) dlg.parentNode.removeChild(dlg); dlg = null; }
+    };
+  }
+
+  /* ---------- the wall ---------- */
   function mount(el) {
-    var cellCount = parseInt(el.getAttribute('data-cells'), 10) || 12;
-    var minMs = parseInt(el.getAttribute('data-min'), 10) || 450;
-    var maxMs = Math.max(minMs, parseInt(el.getAttribute('data-max'), 10) || 900);
+    var count = parseInt(el.getAttribute('data-cells'), 10) || 12;
+    var sMin = parseInt(el.getAttribute('data-min'), 10), sMax = parseInt(el.getAttribute('data-max'), 10);
+    if (!(sMin >= 1500)) sMin = 3000;
+    if (!(sMax >= sMin)) sMax = Math.max(sMin, 6000);
     var manifest = el.getAttribute('data-src');
     if (!manifest) return null;
 
-    var heroOn = el.getAttribute('data-hero') !== 'off';   // data-hero="off" turns the spotlight cards off
-    var photos = [];          // [{ src, alt, lg (optional larger file for the spotlight), focus (optional, e.g. "50% 30%") }]
-    var hero = null, heroImg = null, streak = null, heroTimer = null, heroPhoto = null, heroSide = 0, heroGen = 0, heroRun = false;
-    var ro = null;
-    var cells = [];
-    var shown = {};           // src -> true while displayed in, or reserved by, any cell
-    var cache = {};           // src -> Image (decoded and kept so repeats cost no request)
-    var bad = {};             // src -> true if it failed to load
-    var started = false, destroyed = false;
-    var inView = false;
-    var io = null;
+    var photos = [], cards = [], anchors = [], used = {}, recent = [], bad = {}, timers = [];
+    var mode = null, G = null, gen = 0, swapTimer = null;
+    var started = false, destroyed = false, inView = false, userPaused = false, viewerOpen = false;
+    var io = null, ro = null, viewer = null, ctrl = null, pauseBtn = null, fliesEl = null;
 
     function reduced() { return !!(reduceQuery && reduceQuery.matches); }
-    function running() { return started && !destroyed && inView && !document.hidden && !reduced(); }
-
-    function load(src) {
-      if (cache[src]) return cache[src].promise;
-      var img = new Image();
-      var entry = { img: img };
-      entry.promise = new Promise(function (resolve) {
-        img.onload = function () { resolve(true); };
-        img.onerror = function () { bad[src] = true; resolve(false); };
-      });
-      cache[src] = entry;
-      img.decoding = 'async';
-      img.src = src;
-      return entry.promise;
+    function running() { return started && !destroyed && inView && !document.hidden && !reduced() && !userPaused && !viewerOpen; }
+    function later(fn, ms) {              // timers that die with a rebuild
+      var g = gen, t = setTimeout(function () {
+        var i = timers.indexOf(t); if (i > -1) timers.splice(i, 1);
+        if (g === gen && !destroyed) fn();
+      }, ms);
+      timers.push(t);
     }
 
-    // random photo that is not on screen, not reserved by another cell, and not this cell's last one
-    function pick(cell) {
-      var pool = [], i;
-      for (i = 0; i < photos.length; i++) {
-        var s = photos[i].src;
-        if (!bad[s] && !shown[s] && s !== cell.last) pool.push(photos[i]);
+    /* ----- spots photos can float in ----- */
+    function buildAnchors() {
+      anchors = [];
+      for (var r = 0; r < G.rows; r++) for (var c = 0; c < G.cols; c++)
+        anchors.push({ cx: (c + 0.5) / G.cols, cy: (r + 0.5) / G.rows, cw: 1 / G.cols, ch: 1 / G.rows, busy: false });
+    }
+    function freeAnchor(avoid, depth) {
+      var free = anchors.filter(function (a) { return !a.busy && a !== avoid; });
+      if (!free.length) free = anchors.filter(function (a) { return !a.busy; });
+      if (!free.length) return null;
+      if (depth === 'near') {             // composition: big foreground photos keep their distance from each other
+        var nears = cards.filter(function (c) { return !c.leaving && c.depth === 'near'; });
+        var taken0 = anchors.filter(function (a) { return a.busy; });
+        var scored = free.map(function (a) {
+          var best = 9;
+          nears.forEach(function (c) { best = Math.min(best, Math.hypot((a.cx - c.anchor.cx) * 1.4, a.cy - c.anchor.cy)); });
+          taken0.forEach(function (t) { best = Math.min(best, Math.hypot((a.cx - t.cx) * 1.4, a.cy - t.cy) * 1.6); });
+          return { a: a, s: best + Math.random() * 0.15 };
+        }).sort(function (x, y) { return y.s - x.s; });
+        return scored[Math.floor(Math.random() * Math.min(2, scored.length))].a;
       }
-      if (!pool.length) {
-        for (i = 0; i < photos.length; i++) {
-          if (!bad[photos[i].src] && photos[i].src !== cell.current) pool.push(photos[i]);
-        }
-      }
+      var taken = anchors.filter(function (a) { return a.busy; });   // everything else: favour the emptiest areas, so the wall stays balanced
+      var spread = free.map(function (a) {
+        var best = 9;
+        taken.forEach(function (t) { best = Math.min(best, Math.hypot((a.cx - t.cx) * 1.4, a.cy - t.cy)); });
+        return { a: a, s: best + Math.random() * 0.12 };
+      }).sort(function (x, y) { return y.s - x.s; });
+      return spread[Math.floor(Math.random() * Math.min(3, spread.length))].a;
+    }
+
+    /* ----- which photo next: never one that is on screen, and not one that just left ----- */
+    function pickPhoto() {
+      var pool = photos.filter(function (p) { return !bad[p.src] && !used[p.src] && recent.indexOf(p.src) < 0; });
+      if (!pool.length) pool = photos.filter(function (p) { return !bad[p.src] && !used[p.src]; });
       return pool.length ? pool[Math.floor(Math.random() * pool.length)] : null;
     }
-
-    function release(src) { if (src) delete shown[src]; }
-
-    function prepareNext(cell, tries) {
-      var p = pick(cell);
-      if (!p) { cell.next = null; return; }
-      cell.next = p; cell.ready = false;
-      shown[p.src] = true;
-      load(p.src).then(function (ok) {
-        if (destroyed || cell.next !== p) return;
-        if (ok) { cell.ready = true; return; }
-        release(p.src); cell.next = null;
-        if ((tries || 0) < 5) prepareNext(cell, (tries || 0) + 1);
-      });
+    function chooseDepth() {              // keeps a steady mix of far, middle and near photos
+      var counts = { far: 0, mid: 0, near: 0 }, total = 0, best = 'mid', gap = -9, k;
+      cards.forEach(function (c) { if (!c.leaving) { counts[c.depth]++; total++; } });
+      for (k in DEPTHS) {
+        var want = DEPTHS[k].mix - (total ? counts[k] / total : 0) + Math.random() * 0.2;
+        if (want > gap) { gap = want; best = k; }
+      }
+      return best;
     }
 
-    function show(cell, photo, animate, done) {
-      var inc = cell.layers[1 - cell.top];
-      var out = cell.layers[cell.top];
-      inc.className = 'pg-img is-enter';
-      inc.alt = photo.alt || '';
-      inc.style.objectPosition = photo.focus || '';   // keeps faces in view when the photo is cropped
-      inc.src = photo.src;
-      var ready = inc.decode ? inc.decode().catch(noop) : Promise.resolve();
+    /* ----- one floating photo ----- */
+    function createCard(p, a, ar, depth) {
+      var d = DEPTHS[depth];
+      var W = el.clientWidth, H = el.clientHeight;
+      var mat = (depth === 'near' || (depth === 'mid' && Math.random() < 0.6) ? d.mat : 0) * (G.k > 1 ? 0.8 : 1);   // frame width in px
+      var w = a.cw * W * d.size * G.k, maxH = a.ch * H * (0.9 + 0.35 * d.size) * G.k;
+      var h = (w - 2 * mat) / ar + 2 * mat;                         // the card is as tall as the photo plus its frame: no stretching, no cropping
+      if (h > maxH) { h = maxH; w = (h - 2 * mat) * ar + 2 * mat; } // tall photos get narrower instead
+      var cx = (a.cx + rand(-0.2, 0.2) * a.cw) * W, cy = (a.cy + rand(-0.2, 0.2) * a.ch) * H;
+      var drift = 8 + d.amp * G.calm;                               // room for the float and tilt, so photos stay inside
+      var band = 44;                                                // clear strip at the bottom for the Pause button
+      cx = clamp(cx, w / 2 + drift, W - w / 2 - drift);
+      cy = clamp(cy, h / 2 + drift, H - h / 2 - drift - band);
+
+      var card = document.createElement('div');
+      card.className = 'fw-card' + (mat ? ' has-border' : '');
+      card.setAttribute('data-depth', depth);
+      card.setAttribute('data-idx', String(photos.indexOf(p)));
+      card.setAttribute('role', 'button'); card.setAttribute('tabindex', '0'); card.setAttribute('aria-label', 'Open photo');
+      var s = card.style, fade = rand(FADE[0], FADE[1]);
+      var ang = rand(0, Math.PI * 2), mag = rand(24, 46) * (G.k > 1 ? 0.7 : 1), ang2 = ang + Math.PI + rand(-1, 1);
+      var dur = rand(d.dur[0], d.dur[1]) / G.calm;
+      s.left = (cx / W * 100).toFixed(2) + '%'; s.top = (cy / H * 100).toFixed(2) + '%';
+      s.width = (w / W * 100).toFixed(2) + '%'; s.zIndex = d.z;
+      s.setProperty('--mat', mat.toFixed(1) + 'px'); s.setProperty('--mat-color', MATS[Math.floor(Math.random() * MATS.length)]);
+      s.setProperty('--rot', rand(-d.tilt, d.tilt).toFixed(2) + 'deg');
+      s.setProperty('--op', d.op);
+      s.setProperty('--fade', fade.toFixed(0) + 'ms');
+      s.setProperty('--ex', (Math.cos(ang) * mag).toFixed(0) + 'px'); s.setProperty('--ey', (Math.sin(ang) * mag).toFixed(0) + 'px');
+      s.setProperty('--lx', (Math.cos(ang2) * mag * 0.8).toFixed(0) + 'px'); s.setProperty('--ly', (Math.sin(ang2) * mag * 0.8).toFixed(0) + 'px');
+      s.setProperty('--dx', (sign() * rand(0.5, 1) * d.amp * G.calm).toFixed(1) + 'px');
+      s.setProperty('--dy', (sign() * rand(0.5, 1) * d.amp * G.calm).toFixed(1) + 'px');
+      s.setProperty('--dr', (sign() * rand(0.6, 1.6) * G.calm).toFixed(2) + 'deg');
+      s.setProperty('--s0', rand(0.96, 0.995).toFixed(3)); s.setProperty('--s1', rand(1.005, 1.05).toFixed(3));
+      // sideways drift, up/down drift, tilt and zoom each run on their own clock, so the motion never lines up or repeats
+      s.setProperty('--dur-x', dur.toFixed(1) + 's');        s.setProperty('--del-x', (-rand(0, dur)).toFixed(1) + 's');
+      s.setProperty('--dur-y', (dur * 0.83).toFixed(1) + 's'); s.setProperty('--del-y', (-rand(0, dur)).toFixed(1) + 's');
+      s.setProperty('--dur-r', (dur * 1.31).toFixed(1) + 's'); s.setProperty('--del-r', (-rand(0, dur)).toFixed(1) + 's');
+      s.setProperty('--dur-s', (dur * 1.12).toFixed(1) + 's'); s.setProperty('--del-s', (-rand(0, dur)).toFixed(1) + 's');
+
+      var fl = document.createElement('div'); fl.className = 'fw-float';
+      var fr = document.createElement('div'); fr.className = 'fw-frame';
+      var im = document.createElement('img'); im.alt = ''; im.decoding = 'async'; im.draggable = false; im.src = p.src;
+      fr.appendChild(im); fl.appendChild(fr);
+      if (mat) { var trim = document.createElement('div'); trim.className = 'fw-trim'; fl.appendChild(trim); }   // gold corner marks
+      card.appendChild(fl);
+      el.appendChild(card);
+
+      var rec = { el: card, photo: p, anchor: a, depth: depth, leaving: false, lit: false, litAt: 0, born: Date.now() };
+      cards.push(rec);
+      var ready = im.decode ? im.decode().catch(noop) : Promise.resolve();
       ready.then(function () {
-        if (destroyed) return;
-        void inc.offsetWidth; // commit opacity:0 so the fade actually runs
-        inc.className = 'pg-img is-front' + (animate ? '' : ' no-fade');
-        if (out.getAttribute('src')) out.className = 'pg-img is-back';
-        cell.top = 1 - cell.top;
-        if (done) done();
+        if (rec.gone || destroyed) return;
+        void card.offsetWidth;                                       // commit the hidden state so the fade runs
+        card.classList.add('is-in');
       });
     }
-
-    function schedule(cell) {
-      clearTimeout(cell.timer);
-      cell.timer = setTimeout(function () { tick(cell); }, rand(minMs, maxMs));
+    function enterOne(avoid) {
+      var depth = chooseDepth(), a = freeAnchor(avoid, depth), p = pickPhoto(), g = gen;
+      if (!a || !p) return;
+      a.busy = true; used[p.src] = true;
+      probe(p.src).then(function (r) {
+        if (g !== gen || destroyed) return;
+        if (!r.ok) { bad[p.src] = true; delete used[p.src]; a.busy = false; later(function () { enterOne(); }, 300); return; }
+        createCard(p, a, r.w / r.h, depth);
+      });
+    }
+    function remove(rec) {
+      var i = cards.indexOf(rec); if (i > -1) cards.splice(i, 1);
+      rec.gone = true;
+      if (rec.el.parentNode) rec.el.parentNode.removeChild(rec.el);
+      delete used[rec.photo.src]; rec.anchor.busy = false;
+      recent.push(rec.photo.src); if (recent.length > RECENT) recent.shift();
+    }
+    function leave(rec) {
+      if (rec.leaving) return;
+      rec.leaving = true;
+      rec.el.classList.remove('is-in'); rec.el.classList.add('is-out');
+      later(function () { remove(rec); }, (parseFloat(rec.el.style.getPropertyValue('--fade')) || 900) * 1.4 + 80);
     }
 
-    function tick(cell) {
-      cell.timer = null;
-      if (!running()) return;
-      if (!cell.next || !cell.ready) {          // nothing preloaded yet: try again shortly
-        if (!cell.next) prepareNext(cell);
-        cell.timer = setTimeout(function () { tick(cell); }, 120);
-        return;
+    /* ----- the shuffle: one photo leaves, a different one arrives somewhere else a moment later ----- */
+    function swap() {
+      var active = cards.filter(function (c) { return !c.leaving; });
+      if (active.length < G.target) { enterOne(); return; }
+      var cand = active.filter(function (c) { return !c.el.matches(':hover') && !c.el.contains(document.activeElement); });
+      rotateLit();
+      if (!cand.length) return;
+      cand.sort(function (x, y) { return x.born - y.born; });
+      var rec = cand[Math.floor(Math.random() * Math.ceil(cand.length / 2))];   // favours photos that have been up longest
+      leave(rec);
+      later(function () { enterOne(rec.anchor); }, rand(350, 1000));
+    }
+    function rotateLit() {                // a soft glow moves slowly from photo to photo
+      var lit = cards.filter(function (c) { return c.lit && !c.leaving; });
+      if (lit.length >= MAX_LIT) {
+        lit.sort(function (x, y) { return x.litAt - y.litAt; });
+        lit[0].lit = false; lit[0].el.classList.remove('is-lit');
       }
-      var photo = cell.next;
-      var old = cell.current;
-      cell.next = null; cell.ready = false;
-      cell.last = old; cell.current = photo.src;
-      show(cell, photo, true);
-      release(old);
-      prepareNext(cell);
-      schedule(cell);
+      var cand = cards.filter(function (c) { return !c.leaving && !c.lit && c.depth !== 'far'; });
+      if (!cand.length) return;
+      var c = cand[Math.floor(Math.random() * cand.length)];
+      c.lit = true; c.litAt = Date.now(); c.el.classList.add('is-lit');
     }
-
-    function startTimers() {
-      for (var i = 0; i < cells.length; i++) schedule(cells[i]);
+    function scheduleSwap() {
+      clearTimeout(swapTimer);
+      swapTimer = setTimeout(function () {
+        swapTimer = null;
+        if (!running()) return;
+        swap(); scheduleSwap();
+      }, rand(sMin, sMax));
     }
-    function stopTimers() {
-      for (var i = 0; i < cells.length; i++) { clearTimeout(cells[i].timer); cells[i].timer = null; }
-    }
-    /* ---- spotlight card: a photo shown whole on a large tilted card, then it settles back ---- */
-    function heroUrl(p) { return p.lg && !bad[p.lg] ? p.lg : p.src; }
-    function pickHero() {
-      var pool = [], i;
-      for (i = 0; i < photos.length; i++) if (!bad[photos[i].src] && !shown[photos[i].src]) pool.push(photos[i]);
-      return pool.length ? pool[Math.floor(Math.random() * pool.length)] : null;
-    }
-    function heroStop() {
-      heroGen++; heroRun = false;
-      clearTimeout(heroTimer); heroTimer = null;
-      if (hero) { hero.classList.remove('is-on'); el.classList.remove('is-spot'); }
-      if (heroPhoto) { release(heroPhoto.src); heroPhoto = null; }
-    }
-    function heroStart() {
-      if (heroRun || !hero) return;
-      heroRun = true;
-      var g = ++heroGen;
-      heroTimer = setTimeout(function () { heroNext(g); }, 800);
-    }
-    function heroNext(g) {
-      if (g !== heroGen) return;
-      var p = pickHero();
-      if (!p) { heroTimer = setTimeout(function () { heroNext(g); }, 1000); return; }
-      shown[p.src] = true;                         // no cell shows this photo while it is spotlighted
-      var url = heroUrl(p);
-      load(url).then(function (ok) {
-        if (g !== heroGen) { release(p.src); return; }
-        if (!ok) { release(p.src); heroTimer = setTimeout(function () { heroNext(g); }, 300); return; }
-        heroPhoto = p; heroSide = 1 - heroSide;
-        hero.className = 'pg-hero ' + (heroSide ? 'is-right' : 'is-left');
-        heroImg.src = url;
-        var ready = heroImg.decode ? heroImg.decode().catch(noop) : Promise.resolve();
-        ready.then(function () {
-          if (g !== heroGen) return;               // paused meanwhile; heroStop already released the photo
-          var cs = getComputedStyle(el);           // card fits the photo's own shape, so nothing is cropped or letterboxed
-          var ar = (heroImg.naturalWidth || 4) / (heroImg.naturalHeight || 3);
-          var w = Math.min(el.clientWidth * (parseFloat(cs.getPropertyValue('--pg-hero-w')) || 0.46),
-                           el.clientHeight * (parseFloat(cs.getPropertyValue('--pg-hero-h')) || 0.88) * ar);
-          hero.style.width = w.toFixed(0) + 'px'; hero.style.height = (w / ar).toFixed(0) + 'px';
-          void hero.offsetWidth;
-          hero.classList.add('is-on'); el.classList.add('is-spot');
-          streak.classList.remove('is-go'); void streak.offsetWidth; streak.classList.add('is-go');
-          heroTimer = setTimeout(function () {
-            if (g !== heroGen) return;
-            hero.classList.remove('is-on'); el.classList.remove('is-spot');
-            release(p.src); heroPhoto = null;
-            heroTimer = setTimeout(function () { heroNext(g); }, rand(HERO_GAP[0], HERO_GAP[1]));
-          }, HERO_HOLD);
-        });
-      });
-    }
-
-    /* ---- depth: outer columns turn slightly inward, so the grid reads like floating panels ---- */
-    function tilt() {
-      var cols = getComputedStyle(el).gridTemplateColumns.split(' ').length || 1;
-      var rows = Math.ceil(cells.length / cols), spread = cols > 3 ? 13 : 9;
-      cells.forEach(function (c, i) {
-        var t = cols > 1 ? ((i % cols) / (cols - 1)) * 2 - 1 : 0;
-        var u = rows > 1 ? (Math.floor(i / cols) / (rows - 1)) * 2 - 1 : 0;
-        c.el.style.setProperty('--pg-ry', (-t * spread).toFixed(1) + 'deg');
-        c.el.style.setProperty('--pg-rx', (u * 3).toFixed(1) + 'deg');
-        c.el.style.setProperty('--pg-tz', ((1 - Math.abs(t)) * 24).toFixed(0) + 'px');
-        c.el.style.setProperty('--pg-rz', c.rz.toFixed(2) + 'deg');
-      });
-    }
-
     function sync() {
-      if (running()) { startTimers(); if (heroOn) heroStart(); }
-      else { stopTimers(); heroStop(); }
+      var go = running();
+      el.classList.toggle('is-paused', !go);
+      if (go) { if (!swapTimer) scheduleSwap(); }
+      else { clearTimeout(swapTimer); swapTimer = null; }
     }
 
-    function build() {
-      el.textContent = '';
-      var frag = document.createDocumentFragment();
-      for (var i = 0; i < cellCount; i++) {
-        var div = document.createElement('div');
-        div.className = 'pg-cell';
-        var a = document.createElement('img'), b = document.createElement('img');
-        a.className = b.className = 'pg-img';
-        a.alt = b.alt = ''; a.decoding = b.decoding = 'async'; a.draggable = b.draggable = false;
-        div.appendChild(a); div.appendChild(b);
-        frag.appendChild(div);
-        cells.push({ el: div, layers: [a, b], top: 1, current: null, last: null, next: null, ready: false, timer: null, rz: rand(-1.1, 1.1) });
+    /* ----- layout by screen size (CSS decides the mode with --fw-mode) ----- */
+    function clearAll() {
+      gen++;
+      timers.forEach(clearTimeout); timers = [];
+      cards.forEach(function (c) { c.gone = true; if (c.el.parentNode) c.el.parentNode.removeChild(c.el); });
+      cards = []; used = {}; recent = [];
+    }
+    function populate() {
+      for (var i = 0; i < G.target; i++) later(function () { enterOne(); }, reduced() ? 0 : i * 230 + rand(0, 180));
+    }
+    function layout() {
+      if (!el.clientWidth) return;
+      var m = (getComputedStyle(el).getPropertyValue('--fw-mode') || '').trim();
+      if (!MODES[m]) m = 'wide';
+      if (m === mode) return;
+      mode = m; G = MODES[m];
+      G.target = Math.max(4, Math.round(count * G.share));
+      el.setAttribute('data-mode', m);
+      clearAll(); buildAnchors(); buildFlies();
+      if (started) populate();
+    }
+
+    /* ----- fireflies: tiny lights that wander and blink behind the photos ----- */
+    function buildFlies() {
+      if (!fliesEl) return;
+      fliesEl.textContent = '';
+      var frag = document.createDocumentFragment(), calm = G.calm, i, f, size, gold, wd;
+      for (i = 0; i < G.flies; i++) {
+        f = document.createElement('i'); f.className = 'fw-fly';
+        size = rand(1.8, 3.8); gold = Math.random() < 0.65; wd = rand(20, 38);
+        var s = f.style;
+        s.left = rand(2, 98).toFixed(1) + '%'; s.top = rand(3, 94).toFixed(1) + '%';
+        s.setProperty('--fs', size.toFixed(1) + 'px');
+        s.setProperty('--fc', gold ? '#ffd98a' : '#fff6e0');
+        s.setProperty('--fg', gold ? 'rgba(255,205,120,0.55)' : 'rgba(255,246,226,0.5)');
+        s.setProperty('--fg2', gold ? 'rgba(255,190,100,0.2)' : 'rgba(255,240,210,0.16)');
+        s.setProperty('--pk', rand(0.5, 0.95).toFixed(2));                       // how bright it gets
+        s.setProperty('--wd', wd.toFixed(1) + 's'); s.setProperty('--wl', (-rand(0, wd)).toFixed(1) + 's');
+        s.setProperty('--bd', rand(4, 9).toFixed(1) + 's'); s.setProperty('--bl', (-rand(0, 9)).toFixed(1) + 's');
+        for (var k = 1; k <= 3; k++) {                                           // slow wandering path
+          s.setProperty('--x' + k, (sign() * rand(20, 70) * calm).toFixed(0) + 'px');
+          s.setProperty('--y' + k, (sign() * rand(16, 56) * calm).toFixed(0) + 'px');
+        }
+        frag.appendChild(f);
       }
-      el.appendChild(frag);
-      if (heroOn) {                // spotlight card and light streak sit on top of the grid (absolutely positioned)
-        streak = document.createElement('div'); streak.className = 'pg-streak'; streak.setAttribute('aria-hidden', 'true');
-        hero = document.createElement('div'); hero.className = 'pg-hero'; hero.setAttribute('aria-hidden', 'true');
-        heroImg = document.createElement('img'); heroImg.alt = ''; heroImg.decoding = 'async'; heroImg.draggable = false;
-        hero.appendChild(heroImg);
-        el.appendChild(streak); el.appendChild(hero);
-      }
-      tilt();
+      fliesEl.appendChild(frag);
     }
 
     function begin() {
       if (started || destroyed) return;
       started = true;
-      // first picture for every cell: all different where there are enough photos
-      cells.forEach(function (cell) {
-        var p = pick(cell);
-        if (!p) return;
-        cell.current = p.src; shown[p.src] = true;
-        load(p.src).then(function (ok) {
-          if (destroyed) return;
-          if (!ok) { release(p.src); cell.current = null; var q = pick(cell); if (!q) return; p = q; cell.current = q.src; shown[q.src] = true; load(q.src).then(function () { go(); }); return; }
-          go();
-        });
-        function go() {
-          if (destroyed) return;
-          show(cell, p, true, function () {
-            cell.el.classList.add('is-loaded');
-            prepareNext(cell);
-          });
-        }
-      });
+      layout();
+      if (G) populate();
       sync();
     }
-
+    function openAt(i, from) { if (viewer) viewer.open(i, from); }
     function onVisibility() { sync(); }
-    function onMotion() { sync(); }
+    function onMotion() { if (pauseBtn) pauseBtn.hidden = reduced(); sync(); }
 
     function init(list) {
       photos = list.filter(function (p) { return p && typeof p.src === 'string'; });
-      if (photos.length < 2) return;
-      build();                    // empty cells reserve the space; photos load when the grid is near the viewport
-      if ('ResizeObserver' in window) { ro = new ResizeObserver(tilt); ro.observe(el); }
-      else window.addEventListener('resize', tilt);
+      if (photos.length < 8) return;
+      viewer = createViewer(photos, function (open) { viewerOpen = open; sync(); }, function () { return pauseBtn; });
+
+      fliesEl = document.createElement('div'); fliesEl.className = 'fw-flies'; fliesEl.setAttribute('aria-hidden', 'true');
+      el.appendChild(fliesEl);
+
+      ctrl = document.createElement('div'); ctrl.className = 'fw-ctrl';
+      pauseBtn = document.createElement('button'); pauseBtn.type = 'button'; pauseBtn.className = 'fw-btn';
+      pauseBtn.textContent = 'Pause'; pauseBtn.setAttribute('aria-pressed', 'false'); pauseBtn.hidden = reduced();
+      pauseBtn.addEventListener('click', function () {
+        userPaused = !userPaused;
+        pauseBtn.textContent = userPaused ? 'Play' : 'Pause';
+        pauseBtn.setAttribute('aria-pressed', String(userPaused));
+        sync();
+      });
+      ctrl.appendChild(pauseBtn); el.appendChild(ctrl);
+
+      el.addEventListener('click', function (e) {
+        var c = e.target.closest ? e.target.closest('.fw-card') : null;
+        if (c) openAt(parseInt(c.getAttribute('data-idx'), 10) || 0, c);
+      });
+      el.addEventListener('keydown', function (e) {                // photos can be opened from the keyboard too
+        if (e.key !== 'Enter' && e.key !== ' ') return;
+        var c = e.target.closest ? e.target.closest('.fw-card') : null;
+        if (!c) return;
+        e.preventDefault();
+        openAt(parseInt(c.getAttribute('data-idx'), 10) || 0, c);
+      });
+
+      layout();
+      if ('ResizeObserver' in window) { ro = new ResizeObserver(layout); ro.observe(el); }
+      else window.addEventListener('resize', layout);
       if ('IntersectionObserver' in window) {
         io = new IntersectionObserver(function (entries) {
           inView = entries[entries.length - 1].isIntersecting;
-          if (inView) begin();      // photos are only requested once the grid is near the viewport
+          if (inView) begin();            // photos are only requested once the wall is near the viewport
           sync();
         }, { rootMargin: '200px 0px' });
         io.observe(el);
-      } else {
-        inView = true; begin();
-      }
+      } else { inView = true; begin(); }
       document.addEventListener('visibilitychange', onVisibility);
       if (reduceQuery) {
         if (reduceQuery.addEventListener) reduceQuery.addEventListener('change', onMotion);
@@ -284,20 +434,21 @@
     fetch(manifest, { credentials: 'same-origin' })
       .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
       .then(init)
-      .catch(function () { /* no manifest: leave the grid empty */ });
+      .catch(function () { /* no list: the wall stays empty */ });
 
     return {
       destroy: function () {
-        destroyed = true; stopTimers(); heroStop();
+        destroyed = true; clearAll(); clearTimeout(swapTimer);
         if (io) io.disconnect();
-        if (ro) ro.disconnect(); else window.removeEventListener('resize', tilt);
+        if (ro) ro.disconnect(); else window.removeEventListener('resize', layout);
         document.removeEventListener('visibilitychange', onVisibility);
         if (reduceQuery) {
           if (reduceQuery.removeEventListener) reduceQuery.removeEventListener('change', onMotion);
           else if (reduceQuery.removeListener) reduceQuery.removeListener(onMotion);
         }
-        cache = {}; shown = {};
-        el.textContent = '';
+        if (viewer) viewer.destroy();
+        if (ctrl && ctrl.parentNode) ctrl.parentNode.removeChild(ctrl);
+        if (fliesEl && fliesEl.parentNode) fliesEl.parentNode.removeChild(fliesEl);
       }
     };
   }
