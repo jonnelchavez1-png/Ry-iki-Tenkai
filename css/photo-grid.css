@@ -1,4 +1,4 @@
-/* Floating photo wall (js/photo-grid.js). Everything is scoped to .photo-grid / .fw-* */
+/* Framed photo rows (js/photo-grid.js). Everything is scoped to .photo-grid / .fw-* */
 .photo-grid {
   --fw-mode: wide;                                  /* read by the script: wide, mid or small */
   position: relative; overflow: hidden; isolation: isolate;
@@ -26,8 +26,8 @@
   background: radial-gradient(ellipse at 50% 50%, transparent 58%, rgba(0, 0, 0, 0.45) 100%);
 }
 
-/* fireflies: tiny warm lights behind the photos. They never take clicks. */
-.fw-flies { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+/* fireflies: tiny warm lights drifting over the scene. They never take clicks. */
+.fw-flies { position: absolute; inset: 0; z-index: 5; overflow: hidden; pointer-events: none; }
 .fw-fly {
   position: absolute; width: var(--fs, 3px); height: var(--fs, 3px); border-radius: 50%; opacity: 0; pointer-events: none;
   background: var(--fc, #ffd98a);
@@ -53,89 +53,42 @@
   88% { opacity: 0; }
 }
 
-/* one floating photo: .fw-card places and fades it, .fw-float drifts sideways, tilts and zooms,
-   .fw-frame drifts up and down and is the framed picture */
-.fw-card {
-  position: absolute; left: 50%; top: 50%; margin: 0; cursor: pointer; opacity: 0; outline: none;
-  transform: translate(-50%, -50%) translate(var(--ex, 0px), var(--ey, 0px)) rotate(var(--rot, 0deg)) scale(0.92);
-  transition: opacity var(--fade, 900ms) ease, transform calc(var(--fade, 900ms) * 1.5) cubic-bezier(0.22, 0.8, 0.3, 1);
-  will-change: transform, opacity; -webkit-tap-highlight-color: transparent;
+/* the rows: tilted in 3D, only photos and gold frames, nothing between them. Never clickable. */
+.fw-rows {
+  position: absolute; inset: 0; z-index: 2; overflow: hidden; pointer-events: none; -webkit-user-select: none; user-select: none;
+  opacity: 0; transition: opacity 0.8s ease;
+  transform: perspective(var(--fw-persp, 1400px)) rotateY(var(--fw-tilt, -35deg)) scale(var(--fw-fit, 0.75)); transform-origin: 50% 50%;
 }
-.fw-card.is-in  { opacity: var(--op, 1); transform: translate(-50%, -50%) rotate(var(--rot, 0deg)) scale(1); }
-.fw-card.is-out { opacity: 0; transform: translate(-50%, -50%) translate(var(--lx, 0px), var(--ly, 0px)) rotate(var(--rot, 0deg)) scale(0.95); }
+.fw-rows.is-ready { opacity: 1; }
+.fw-row { position: absolute; left: 0; width: 100%; }
+.fw-track { position: absolute; left: 0; top: 0; height: 100%; display: flex; will-change: transform; backface-visibility: hidden; }
+.fw-frame { --g: 0; position: relative; flex: none; height: 100%; z-index: 1; box-shadow: 0 10px 18px -8px rgba(0, 0, 0, 0.6); }
+.fw-pic { position: absolute; inset: 0; overflow: hidden; background: #0b1018; }
+.fw-soft { position: absolute; inset: 0; background-size: cover; background-position: var(--fp, 50% 50%); }
+.fw-sharp {
+  position: absolute; inset: 0; display: block; width: 100%; height: 100%; max-width: none; opacity: 0;
+  object-fit: cover; object-position: var(--fp, 50% 50%); -webkit-user-drag: none; user-select: none;
+}
+.fw-frame.is-fit .fw-soft { transform: scale(1.25); filter: brightness(0.55); }       /* whole photo on a dim blurred copy of itself */
+.fw-frame.is-fit .fw-sharp { object-fit: contain; object-position: 50% 50%; }
+.fw-dim { position: absolute; inset: 0; background: #050d18; opacity: 0.6; }
 
-.fw-float {
-  position: relative; width: 100%;
-  animation: fw-x var(--dur-x, 12s) cubic-bezier(0.37, 0, 0.63, 1) var(--del-x, 0s) infinite alternate,
-             fw-r var(--dur-r, 16s) cubic-bezier(0.37, 0, 0.63, 1) var(--del-r, 0s) infinite alternate,
-             fw-z var(--dur-s, 13s) cubic-bezier(0.37, 0, 0.63, 1) var(--del-s, 0s) infinite alternate;
+/* premium frame: a 3px gold line, brightest at the middle of each edge and fading to copper at the corners.
+   The glow stays inside the frame and grows on the photo nearest the middle (--g). */
+.fw-pic::after {
+  content: ""; position: absolute; inset: 0; z-index: 3; pointer-events: none; opacity: calc(0.62 + 0.38 * var(--g));
+  background:
+    linear-gradient(90deg, #8e6a34 0%, #c9a560 22%, #f1dca8 40%, #fffaf0 50%, #f1dca8 60%, #c9a560 78%, #8e6a34 100%) top / 100% 3px no-repeat,
+    linear-gradient(90deg, #8e6a34 0%, #c9a560 22%, #f1dca8 40%, #fffaf0 50%, #f1dca8 60%, #c9a560 78%, #8e6a34 100%) bottom / 100% 3px no-repeat,
+    linear-gradient(180deg, #8e6a34 0%, #c9a560 22%, #f1dca8 40%, #fff4dc 50%, #f1dca8 60%, #c9a560 78%, #8e6a34 100%) left / 3px 100% no-repeat,
+    linear-gradient(180deg, #8e6a34 0%, #c9a560 22%, #f1dca8 40%, #fff4dc 50%, #f1dca8 60%, #c9a560 78%, #8e6a34 100%) right / 3px 100% no-repeat;
 }
-@keyframes fw-x { from { translate: calc(var(--dx, 10px) * -1) 0; } to { translate: var(--dx, 10px) 0; } }
-@keyframes fw-y { from { translate: 0 calc(var(--dy, 10px) * -1); } to { translate: 0 var(--dy, 10px); } }
-@keyframes fw-r { from { rotate: calc(var(--dr, 1deg) * -1); } to { rotate: var(--dr, 1deg); } }
-@keyframes fw-z { from { scale: var(--s0, 0.98); } to { scale: var(--s1, 1.03); } }
+.fw-pic::before {
+  content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none; opacity: calc(0.35 + 0.65 * var(--g));
+  box-shadow: inset 0 0 0 3px rgba(0, 0, 0, 0.18), inset 0 0 10px 3px rgba(246, 212, 150, 0.5), inset 0 0 30px 6px rgba(240, 200, 130, 0.2);
+}
 
-/* the frame: a thin warm or white mat around the photo (width --mat), so the photo keeps its own shape */
-.fw-frame {
-  position: relative; overflow: hidden; border-radius: 2px;
-  padding: var(--mat, 0px); background: var(--mat-color, #0a1320);
-  box-shadow: var(--shadow, 0 8px 20px rgba(0, 0, 0, 0.4));
-  filter: blur(var(--blur, 0px)) brightness(var(--bri, 1)) saturate(var(--sat, 1));
-  transition: transform 0.45s cubic-bezier(0.22, 0.8, 0.3, 1), box-shadow 0.45s ease, filter 0.45s ease;
-  animation: fw-y var(--dur-y, 10s) cubic-bezier(0.37, 0, 0.63, 1) var(--del-y, 0s) infinite alternate;
-}
-.fw-frame img {
-  display: block; width: 100%; height: auto; border-radius: 1px;
-  outline: 1px solid rgba(0, 0, 0, 0.22); outline-offset: -1px;                /* fine print edge */
-  -webkit-user-drag: none; user-select: none;
-}
-/* soft light across the glass: bright top left, a little darker bottom right */
-.fw-frame::after {
-  content: ""; position: absolute; inset: 0; pointer-events: none;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0) 36%, rgba(0, 0, 0, 0.14) 100%);
-}
-/* gold corner marks (top left, bottom right) on framed photos */
-.fw-trim { position: absolute; inset: -5px; pointer-events: none; opacity: 0.75; transition: opacity 0.4s ease; }
-.fw-trim::before, .fw-trim::after { content: ""; position: absolute; width: 11px; height: 11px; border: 0 solid rgba(224, 184, 112, 0.9); }
-.fw-trim::before { left: 0; top: 0; border-left-width: 1px; border-top-width: 1px; }
-.fw-trim::after { right: 0; bottom: 0; border-right-width: 1px; border-bottom-width: 1px; }
-/* glow around the photos that are currently highlighted */
-.fw-float::before {
-  content: ""; position: absolute; inset: 0; z-index: -1; border-radius: 3px; pointer-events: none; opacity: 0;
-  box-shadow: 0 0 34px 6px rgba(240, 200, 135, 0.38), 0 0 90px 20px rgba(240, 190, 110, 0.16);
-  transition: opacity 1.4s ease;
-}
-.fw-card.is-lit .fw-float::before { opacity: 1; animation: fw-glow 5s ease-in-out infinite alternate; }
-@keyframes fw-glow { from { opacity: 0.6; } to { opacity: 1; } }
-.fw-card.is-lit .fw-frame { --bri: 1.06; }
-
-/* depth: far photos are small, soft, darker and flat; near photos are sharp, framed, with a deeper shadow */
-.fw-card[data-depth="far"]  { --blur: 1.5px; --bri: 0.76; --sat: 0.85;
-  --shadow: 0 0 0 1px rgba(255, 255, 255, 0.1), 0 6px 14px rgba(0, 0, 0, 0.28), 0 14px 26px rgba(0, 0, 0, 0.22); }
-.fw-card[data-depth="mid"]  {
-  --shadow: 0 0 0 1px rgba(255, 240, 220, 0.14), 0 1px 1px rgba(0, 0, 0, 0.35), 0 5px 10px rgba(0, 0, 0, 0.28), 0 16px 32px rgba(0, 0, 0, 0.36); }
-.fw-card[data-depth="near"] {
-  --shadow: 0 0 0 1px rgba(255, 240, 220, 0.2), 0 1px 1px rgba(0, 0, 0, 0.4), 0 6px 12px rgba(0, 0, 0, 0.35), 0 24px 46px rgba(0, 0, 0, 0.46); }
-.photo-grid[data-mode="small"] .fw-card { --blur: 0px; }    /* no blur on phones: cheaper */
-
-.photo-grid.is-paused .fw-float, .photo-grid.is-paused .fw-frame, .photo-grid.is-paused .fw-fly,
-.photo-grid.is-paused .fw-card.is-lit .fw-float::before { animation-play-state: paused; }
-
-/* hover (mouse): come forward, brighten, hold still. On touch screens a tap opens the viewer instead. */
-@media (hover: hover) {
-  .fw-card:hover { z-index: 30 !important; }
-  .fw-card.is-in:hover { opacity: 1; }
-  .fw-card:hover .fw-float, .fw-card:hover .fw-frame { animation-play-state: paused; }
-  .fw-card:hover .fw-frame {
-    transform: scale(1.07); filter: none;
-    box-shadow: 0 0 0 1px rgba(255, 244, 226, 0.5), 0 28px 56px rgba(0, 0, 0, 0.7), 0 0 36px rgba(240, 200, 135, 0.28);
-  }
-  .fw-card:hover .fw-trim { opacity: 1; }
-  .fw-card:hover img { filter: brightness(1.06); }
-}
-/* keyboard focus */
-.fw-card:focus-visible { z-index: 30 !important; opacity: 1; }
-.fw-card:focus-visible .fw-frame { filter: none; box-shadow: 0 0 0 2px #d9b36c, 0 24px 50px rgba(0, 0, 0, 0.65); }
+.photo-grid.is-paused .fw-fly { animation-play-state: paused; }
 
 /* pause button */
 .fw-ctrl { position: absolute; left: 0.7rem; right: 0.7rem; bottom: 0.7rem; z-index: 40; display: flex; justify-content: flex-start; pointer-events: none; }
@@ -152,57 +105,14 @@
 .fw-btn:hover { color: #fff; border-color: rgba(235, 205, 150, 0.65); background: rgba(8, 16, 28, 0.75); }
 .fw-btn:focus-visible { outline: 2px solid #d9b36c; outline-offset: 2px; }
 
-/* viewer */
-.fw-lb {
-  position: fixed; inset: 0; width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; padding: 0; border: 0;
-  background: radial-gradient(ellipse at 50% 42%, rgba(20, 40, 64, 0.96) 0%, rgba(4, 9, 16, 0.985) 72%);
-  color: #fff; display: none; place-items: center; overflow: hidden;
-  touch-action: pan-y pinch-zoom;                   /* lets a sideways swipe reach the script instead of the browser */
-}
-.fw-lb::before {                                    /* same halftone dots as the wall */
-  content: ""; position: absolute; inset: 0; pointer-events: none;
-  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.07) 0 1px, transparent 1.7px); background-size: 8px 8px;
-  -webkit-mask-image: radial-gradient(ellipse at 50% 50%, transparent 30%, #000 100%); mask-image: radial-gradient(ellipse at 50% 50%, transparent 30%, #000 100%);
-}
-.fw-lb[open] { display: grid; animation: fw-lb-in 0.3s ease both; }
-.fw-lb::backdrop { background: transparent; }
-@keyframes fw-lb-in { from { opacity: 0; } to { opacity: 1; } }
-.fw-lb-img {
-  position: relative; display: block; width: min(94vw, 1700px); height: min(82vh, 1700px); object-fit: contain;
-  -webkit-user-drag: none; user-select: none;
-  opacity: 0; transform: scale(0.985);
-  transition: opacity 0.32s ease, transform 0.45s cubic-bezier(0.22, 0.8, 0.3, 1);
-  filter: drop-shadow(0 0 1px rgba(255, 238, 210, 0.55)) drop-shadow(0 26px 60px rgba(0, 0, 0, 0.7));   /* follows the picture's own edge */
-}
-.fw-lb-img.is-ready { opacity: 1; transform: none; }
-.fw-lb-btn {
-  position: absolute; z-index: 2; display: grid; place-items: center; width: 2.9rem; height: 2.9rem; padding: 0; cursor: pointer;
-  font: inherit; font-size: 1.9rem; line-height: 1; color: rgba(255, 246, 228, 0.9); background: rgba(8, 16, 28, 0.5);
-  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
-  border: 1px solid rgba(235, 205, 150, 0.3); border-radius: 50%;
-  transition: border-color 0.25s ease, background 0.25s ease, color 0.25s ease;
-}
-.fw-lb-btn:hover { color: #fff; background: rgba(8, 16, 28, 0.75); border-color: rgba(235, 205, 150, 0.7); }
-.fw-lb-btn:focus-visible { outline: 2px solid #d9b36c; outline-offset: 2px; }
-.fw-lb-close { top: 0.75rem; right: 0.75rem; }
-.fw-lb-prev, .fw-lb-next { top: 50%; transform: translateY(-50%); }
-.fw-lb-prev { left: 0.75rem; }
-.fw-lb-next { right: 0.75rem; }
-.fw-lb-count { position: absolute; left: 0; right: 0; bottom: 0.9rem; margin: 0; text-align: center; font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(255, 246, 228, 0.7); }
-
-/* tablet: fewer photos, 4:3 */
+/* tablet: 4:3 */
 @media (max-width: 64rem) { .photo-grid { --fw-mode: mid; aspect-ratio: 4 / 3; } }
-/* mobile: fewest photos, taller frame, no blur, calmer motion, fewer fireflies */
-@media (max-width: 40rem) {
-  .photo-grid { --fw-mode: small; aspect-ratio: 4 / 5; }
-  .fw-lb-btn { width: 2.6rem; height: 2.6rem; }
-}
+/* mobile: taller frame, flatter tilt, calmer motion, fewer fireflies */
+@media (max-width: 40rem) { .photo-grid { --fw-mode: small; aspect-ratio: 4 / 5; } }
 
-/* reduced motion: the wall stays still, no fireflies, nothing fades or drifts */
+/* reduced motion: the rows stay still, no fireflies, nothing fades */
 @media (prefers-reduced-motion: reduce) {
-  .fw-float, .fw-frame, .fw-card.is-lit .fw-float::before { animation: none; }
   .fw-flies { display: none; }
-  .fw-card, .fw-frame, .fw-lb-img { transition: none; }
-  .fw-lb[open] { animation: none; }
+  .fw-rows { transition: none; }
 }
-@media print { .photo-grid, .fw-lb { display: none; } }
+@media print { .photo-grid { display: none; } }
