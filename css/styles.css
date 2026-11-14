@@ -616,3 +616,112 @@ body:has(dialog[open]) { overflow: hidden; }
 .lightbox-close { position: absolute; top: 0.4rem; right: 0.4rem; margin: 0; z-index: 1; }
 .lightbox-close button { width: 2.75rem; height: 2.75rem; border: 0; border-radius: 50%; background: rgba(7, 27, 47, 0.78); color: #fff; font-size: 1.7rem; line-height: 1; cursor: pointer; }
 .lightbox-close button:hover { background: var(--navy-900); }
+
+/* ==========================================================================
+   Project showcase (js/projects.js): featured project + one-row carousel of the others,
+   and the shared layout of the project pages in /projects/. All classes start with pj-.
+   ========================================================================== */
+.project-feature h3 { display: flex; align-items: center; gap: 0.7rem; }
+.pj-ico { flex: none; display: inline-grid; place-items: center; width: 2.6rem; height: 2.6rem; border: 1px solid var(--line); border-radius: 3px; background: #fff; color: var(--navy-800); }
+.pj-ico svg { width: 1.35rem; height: 1.35rem; }
+.pj-ico-lg { width: 3.4rem; height: 3.4rem; }
+.pj-ico-lg svg { width: 1.8rem; height: 1.8rem; }
+
+.pj-more { margin-top: clamp(2.5rem, 5vw, 4rem); border-top: 1px solid var(--ink); }
+.pj-head { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 1.25rem 0 1.5rem; }
+.pj-head h3 { margin: 0; font-family: var(--font-body); font-size: 1.05rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.pj-meta { display: flex; align-items: center; gap: 0.9rem; }
+.pj-nav { display: none; align-items: center; gap: 0.9rem; }
+.pj-btn { width: 2.6rem; height: 2.6rem; border-radius: 50%; border: 1px solid var(--ink); background: transparent; color: var(--ink); cursor: pointer; display: grid; place-items: center; padding: 0; transition: background 0.2s, color 0.2s, opacity 0.2s; }
+.pj-btn:hover:not(:disabled) { background: var(--ink); color: #fff; }
+.pj-btn:disabled { opacity: 0.3; cursor: default; }
+.pj-btn svg, .pj-arrow svg { width: 1.1rem; height: 1.1rem; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.pj-count { font-size: 0.85rem; font-weight: 600; letter-spacing: 0.08em; color: var(--muted); min-width: 3.6rem; text-align: right; }
+
+.pj-stage { position: relative; --g: 1.25rem; }
+.pj-track {
+  list-style: none; margin: -0.6rem 0 -1rem; padding: 0.6rem 0 1rem; display: flex; gap: var(--g);
+  overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; -webkit-overflow-scrolling: touch;
+}
+.pj-track::-webkit-scrollbar { display: none; }
+/* arrows on desktop: they appear when the row is hovered or has keyboard focus */
+.pj-arrow {
+  position: absolute; top: calc(50% - 1.5rem); z-index: 3; width: 3rem; height: 3rem; padding: 0; border-radius: 50%;
+  border: 1px solid var(--ink); background: #fff; color: var(--ink); cursor: pointer; display: grid; place-items: center;
+  box-shadow: 0 8px 20px -8px rgba(7, 27, 47, 0.5); opacity: 0; pointer-events: none; transform: scale(0.9);
+  transition: opacity 0.25s, transform 0.25s, background 0.2s, color 0.2s;
+}
+.pj-arrow.p { left: -1.5rem; }
+.pj-arrow.n { right: -1.5rem; }
+.pj-arrow svg { width: 1.2rem; height: 1.2rem; }
+.pj-arrow:hover { background: var(--ink); color: #fff; }
+.pj-more:hover .pj-arrow:not(:disabled), .pj-more:focus-within .pj-arrow:not(:disabled) { opacity: 1; pointer-events: auto; transform: none; }
+@media (hover: none) { .pj-arrow { display: none; } }
+
+.pj-card {
+  flex: 0 0 calc((100% - 3 * var(--g)) / 4); scroll-snap-align: start; position: relative; display: flex; flex-direction: column;
+  background: #fff; border: 1px solid var(--line); border-radius: 3px; overflow: hidden;
+  transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s;
+}
+.pj-card:hover { transform: translateY(-3px); box-shadow: 0 14px 30px -18px rgba(7, 27, 47, 0.45); border-color: #b9b4a8; }
+.pj-card:focus-within { border-color: var(--blue-500); }
+.pj-media { position: relative; aspect-ratio: 16 / 10; background: var(--paper-2); display: grid; place-items: center; overflow: hidden; }
+.pj-media img { width: 100%; height: 100%; object-fit: cover; }
+.pj-media.is-empty { background: repeating-linear-gradient(135deg, var(--paper-2) 0 10px, #e6e2d8 10px 11px); }
+.pj-big { width: 4.2rem; height: 4.2rem; display: grid; place-items: center; background: var(--paper); border: 1px solid var(--line); border-radius: 50%; color: var(--navy-800); }
+.pj-big svg { width: 1.9rem; height: 1.9rem; }
+.pj-sample { position: absolute; top: 0.6rem; right: 0.6rem; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; background: rgba(7, 27, 47, 0.8); color: #fff; padding: 0.18rem 0.5rem; border-radius: 2px; }
+.pj-body { padding: 1.1rem 1.25rem 1.3rem; display: flex; flex-direction: column; flex: 1; }
+.pj-top { display: flex; align-items: center; justify-content: space-between; gap: 0.8rem; margin-bottom: 0.8rem; }
+.pj-top .pj-ico { width: 2.2rem; height: 2.2rem; }
+.pj-top .pj-ico svg { width: 1.15rem; height: 1.15rem; }
+.pj-chip { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.pj-chip::before { content: ""; width: 0.5rem; height: 0.5rem; border-radius: 50%; border: 1.5px solid currentColor; }
+.pj-chip.working { color: var(--blue-600); }
+.pj-chip.working::before { background: var(--blue-600); border-color: var(--blue-600); }
+.pj-chip.ongoing { color: var(--accent); }
+.pj-chip.ongoing::before { background: var(--accent); border-color: var(--accent); }
+.pj-card h4 { font-family: var(--font-display); font-weight: 600; font-size: 1.25rem; line-height: 1.2; margin: 0 0 0.45rem; }
+.pj-card p { margin: 0 0 1rem; color: var(--muted); font-size: 0.96rem; line-height: 1.55; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+.pj-go { margin-top: auto; align-self: flex-start; display: inline-flex; gap: 0.5rem; font-size: 0.95rem; font-weight: 600; color: var(--blue-600); text-decoration: none; border-bottom: 1px solid currentColor; padding-bottom: 0.1rem; }
+.pj-go::after { content: ""; position: absolute; inset: 0; }           /* the whole card is clickable */
+.pj-go .ar { transition: transform 0.2s; }
+.pj-card:hover .pj-go { color: var(--navy-900); }
+.pj-card:hover .pj-go .ar { transform: translateX(3px); }
+.pj-go:focus-visible { outline-offset: 6px; }
+.pj-dots { display: flex; justify-content: center; gap: 0.5rem; margin-top: 1.5rem; }
+.pj-dots i { width: 0.5rem; height: 0.5rem; border-radius: 50%; background: var(--line); transition: background 0.25s, width 0.25s; }
+.pj-dots i.on { background: var(--ink); width: 1.4rem; border-radius: 3px; }
+
+/* tablet and phone: arrows in the header, wider cards, swipe edge to edge */
+@media (max-width: 64rem) {
+  .pj-arrow { display: none; }
+  .pj-nav { display: flex; }
+  .pj-stage { --g: 1rem; }
+  .pj-track { margin-inline: calc(-1 * var(--gutter)); padding-inline: var(--gutter); scroll-padding-inline: var(--gutter); }
+  .pj-card { flex: 0 0 min(46%, 22rem); }
+}
+@media (max-width: 40rem) {
+  .pj-card { flex-basis: 80%; }
+  .pj-head h3 { font-size: 0.9rem; letter-spacing: 0.1em; white-space: nowrap; }
+  .pj-nav { gap: 0.5rem; }
+  .pj-count { min-width: 2.8rem; }
+  .pj-btn { width: 2.4rem; height: 2.4rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pj-card, .pj-card:hover, .pj-arrow, .pj-go .ar, .pj-dots i { transition: none; transform: none; }
+}
+
+/* project pages */
+.page-hero h1.pj-h1 { display: flex; align-items: center; flex-wrap: wrap; gap: 1rem; max-width: none; }
+.meta.pj-meta3 { grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); }
+.pj-hero { margin: 0 0 clamp(2.5rem, 5vw, 4rem); }
+.pj-hero .pj-media { aspect-ratio: 2 / 1; max-height: 30rem; width: 100%; border: 1px solid var(--line); border-radius: 2px; }
+.pj-hero .pj-media:not(.is-empty) { aspect-ratio: 16 / 10; max-width: 46rem; }
+.pj-hero .pj-big { width: 5.4rem; height: 5.4rem; }
+.pj-hero .pj-big svg { width: 2.4rem; height: 2.4rem; }
+.pj-hero figcaption { margin-top: 0.75rem; font-size: 0.88rem; color: var(--muted); }
+.pj-pn { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; padding: 1.4rem 0 clamp(3rem, 6vw, 4.5rem); border-top: 1px solid var(--line); }
+.pj-pn a { text-decoration: none; font-weight: 600; max-width: 22rem; }
+.pj-pn a.next { text-align: right; margin-left: auto; }
+.pj-pn small { display: block; font-weight: 500; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; font-size: 0.72rem; }

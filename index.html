@@ -22,7 +22,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&amp;family=Hanken+Grotesk:wght@400;500;600;700&amp;display=swap">
-  <link rel="stylesheet" href="/css/styles.css?v=7">
+  <link rel="stylesheet" href="/css/styles.css?v=8">
   <link rel="stylesheet" href="/css/photo-grid.css?v=20261115">
 
   <script type="application/ld+json">
@@ -243,7 +243,7 @@
           </div>
           <div>
             <span class="badge">Featured project</span>
-            <h3>AnyJuanPOS</h3>
+            <h3><span class="pj-ico"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/project-icons.svg#i-pos"/></svg></span><span>AnyJuanPOS</span></h3>
             <p>A web-based point-of-sale and business management app. It works offline and syncs when you&rsquo;re back online, and a dashboard tracks your overall income and expenses so you can see whether your business is thriving or falling.</p>
             <p>Not only for retailers: it can be adjusted to fit the way your business runs. Tax-report ready, easy to manage, and budget-friendly for anyone starting out. Use it on a mobile phone, tablet, PC or laptop, or install it as an app that keeps working offline.</p>
             <p>Want to try or test it? Trial and testing are available on request. Just let me know.</p>
@@ -251,34 +251,38 @@
           </div>
         </a>
 
-        <div class="workshop reveal">
-          <h3>In the workshop</h3>
-          <ul>
-            <li class="wide">
-              <strong>Business receipt tracker tool</strong><span class="tag tag-live">Working</span>
-              <p>A Telegram bot and web dashboard that work together to make receipt tracking easier. Just send a receipt photo through Telegram, and the system automatically reads the details, saves them to a database, and updates the dashboard with totals and summaries. The bot also answers common questions. Built with Google Apps Script and the Telegram Bot API, without needing a separate server.</p>
-            </li>
-            <li>
-              <strong>Smart Document Processor</strong><span class="tag">Planned</span>
-              <p>A document automation tool that extracts text and key details from PDFs, photos, and scanned files, cleans up the data, and uses reusable templates to generate ready-to-send letters and fillable documents. Just enter a few details, and the system takes care of the rest, with no need to start from scratch or retype everything.</p>
-            </li>
-            <li>
-              <strong>Outlook email template generator</strong><span class="tag">Planned</span>
-              <p>A template for the emails you send again and again: fill in a few details and get a consistent, ready-to-send Outlook email. It can be customized to your business workflow and process using Microsoft Excel and VBA, and other tools can be explored depending on the approved resources you have.</p>
-            </li>
-            <li>
-              <strong>PDF merger</strong><span class="tag">Planned</span>
-              <p>A simple tool for combining several PDFs into one document: drag and drop your files, select, remove, and move them up or down to set the order. The plan is to grow it into a Universal Document Merger, so that any kind of file can be merged.</p>
-            </li>
-            <li>
-              <strong>Automation &amp; integration tool</strong><span class="tag">Planned</span>
-              <p>Uses Microsoft Power Automate to gather data from different sources and connect it to other apps such as Outlook and Excel, so information moves where it needs to go without copying and pasting.</p>
-            </li>
-            <li>
-              <strong>More small tools</strong><span class="tag">Ongoing</span>
-              <p>Whenever a repetitive task shows up, I look for a way to make it simpler. New projects will be added here once they&rsquo;re ready to show. Have something you&rsquo;d like to automate or improve? <a href="#contact">Let me know!</a></p>
-            </li>
-          </ul>
+        <div class="pj-more reveal" role="region" aria-roledescription="carousel" aria-label="More projects">
+          <div class="pj-head"><h3>More projects</h3>
+            <div class="pj-meta"><div class="pj-nav"><button class="pj-btn" type="button" data-pj="prev" aria-label="Previous projects"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button><button class="pj-btn" type="button" data-pj="next" aria-label="Next projects"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button></div><span class="pj-count" data-pj="count" aria-live="polite">1&ndash;4 of 6</span></div></div>
+          <div class="pj-stage">
+            <button class="pj-arrow p" type="button" data-pj="prev" aria-label="Previous projects"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button><button class="pj-arrow n" type="button" data-pj="next" aria-label="Next projects"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+          <ul class="pj-track" data-pj="track">
+            <li class="pj-card"><div class="pj-media"><img src="/assets/projects/receipt-tracker-preview.svg" width="320" height="200" loading="lazy" alt="Sample preview of the receipt tracker dashboard"><span class="pj-sample">Sample preview</span></div>
+              <div class="pj-body"><div class="pj-top"><span class="pj-ico"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/project-icons.svg#i-receipt"/></svg></span><span class="pj-chip working">Working</span></div>
+                <h4>Business receipt tracker</h4><p>A Telegram bot and web dashboard. Send a receipt photo and the details are read, saved to a database, and shown as totals and summaries.</p>
+                <a class="pj-go" href="/projects/receipt-tracker" aria-label="View details: Business receipt tracker">View details <span class="ar" aria-hidden="true">&rarr;</span></a></div></li>
+            <li class="pj-card"><div class="pj-media is-empty"><span class="pj-big"><span class="pj-glyph"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/project-icons.svg#i-doc"/></svg></span></span></div>
+              <div class="pj-body"><div class="pj-top"><span class="pj-ico"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/project-icons.svg#i-doc"/></svg></span><span class="pj-chip planned">Planned</span></div>
+                <h4>Smart Document Processor</h4><p>Extracts text and key details from PDFs, photos and scanned files, then uses reusable templates to generate ready-to-send letters and fillable documents.</p>
+                <a class="pj-go" href="/projects/document-processor" aria-label="Read the plan: Smart Document Processor">Read the plan <span class="ar" aria-hidden="true">&rarr;</span></a></div></li>
+            <li class="pj-card"><div class="pj-media is-empty"><span class="pj-big"><span class="pj-glyph"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/project-icons.svg#i-mail"/></svg></span></span></div>
+              <div class="pj-body"><div class="pj-top"><span class="pj-ico"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/project-icons.svg#i-mail"/></svg></span><span class="pj-chip planned">Planned</span></div>
+                <h4>Outlook email template generator</h4><p>Fill in a few details and get a consistent, ready-to-send Outlook email, built around Microsoft Excel and VBA.</p>
+                <a class="pj-go" href="/projects/outlook-email-templates" aria-label="Read the plan: Outlook email template generator">Read the plan <span class="ar" aria-hidden="true">&rarr;</span></a></div></li>
+            <li class="pj-card"><div class="pj-media is-empty"><span class="pj-big"><span class="pj-glyph"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/project-icons.svg#i-merge"/></svg></span></span></div>
+              <div class="pj-body"><div class="pj-top"><span class="pj-ico"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/project-icons.svg#i-merge"/></svg></span><span class="pj-chip planned">Planned</span></div>
+                <h4>AllAboutPDF</h4><p>Combine several PDFs into one: drag and drop, remove and reorder. Planned to grow into a universal document merger.</p>
+                <a class="pj-go" href="/projects/allaboutpdf" aria-label="Read the plan: AllAboutPDF">Read the plan <span class="ar" aria-hidden="true">&rarr;</span></a></div></li>
+            <li class="pj-card"><div class="pj-media is-empty"><span class="pj-big"><span class="pj-glyph"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/project-icons.svg#i-flow"/></svg></span></span></div>
+              <div class="pj-body"><div class="pj-top"><span class="pj-ico"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/project-icons.svg#i-flow"/></svg></span><span class="pj-chip planned">Planned</span></div>
+                <h4>Automation &amp; integration tool</h4><p>Uses Microsoft Power Automate to move data between sources and apps like Outlook and Excel, with no copying and pasting.</p>
+                <a class="pj-go" href="/projects/automation-integration" aria-label="Read the plan: Automation &amp; integration tool">Read the plan <span class="ar" aria-hidden="true">&rarr;</span></a></div></li>
+            <li class="pj-card"><div class="pj-media is-empty"><span class="pj-big"><span class="pj-glyph"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/project-icons.svg#i-tools"/></svg></span></span></div>
+              <div class="pj-body"><div class="pj-top"><span class="pj-ico"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/project-icons.svg#i-tools"/></svg></span><span class="pj-chip ongoing">Ongoing</span></div>
+                <h4>More small tools</h4><p>Whenever a repetitive task shows up, I look for a way to make it simpler. New projects are added here once they’re ready to show.</p>
+                <a class="pj-go" href="/projects/small-tools" aria-label="View details: More small tools">View details <span class="ar" aria-hidden="true">&rarr;</span></a></div></li>
+          </ul></div>
+          <div class="pj-dots" data-pj="dots" aria-hidden="true"></div>
         </div>
       </div>
     </section>
@@ -450,6 +454,7 @@
 
   <script src="/js/main.js?v=6" defer></script>
   <script src="/js/chat.js?v=6" defer></script>
+  <script src="/js/projects.js?v=1" defer></script>
   <script src="/js/photo-grid.js?v=20261115" defer></script>
 </body>
 </html>
