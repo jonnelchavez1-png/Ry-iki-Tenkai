@@ -25,6 +25,7 @@
   var TOOLS = [
     { n: 'Salesforce', cat: 'CRM and customer support', al: ['salesforce'] },
     { n: 'Avaya', cat: 'CRM and customer support', al: ['avaya'] },
+    { n: 'Five9', cat: 'communication and contact center', al: ['five9', 'five 9'] },
     { n: 'ServiceNow', cat: 'CRM and customer support', al: ['servicenow', 'service now'] },
     { n: 'Oracle', cat: 'ERP and business systems', al: ['oracle'] },
     { n: 'Workday', cat: 'ERP and business systems', al: ['workday'] },
@@ -55,7 +56,7 @@
     '<strong>CRM and customer support:</strong> Salesforce, Avaya, ServiceNow.<br>' +
     '<strong>ERP and business systems:</strong> Oracle, Workday, Kronos.<br>' +
     '<strong>TMS and supply chain:</strong> E2open, BluJay, OpenDock.<br>' +
-    '<strong>Communication and collaboration:</strong> Slack, Lark, Confluence, Microsoft 365, Google Workspace, Citrix and VMware Horizon.<br>' +
+    '<strong>Communication and collaboration:</strong> Five9 (contact center), Slack, Lark, Confluence, Microsoft 365, Google Workspace, Citrix and VMware Horizon.<br>' +
     '<strong>Productivity and documentation:</strong> Excel (PivotTables, basic VBA), Word, Access.<br>' +
     '<strong>Automation and AI:</strong> Power Platform, Copilot Studio, Google Apps Script, Claude, ChatGPT, Gemini, Copilot.<br>' +
     '<strong>Small tools:</strong> JavaScript, HTML/CSS, VS Code; C++ and Laravel at a basic level.';
@@ -90,7 +91,7 @@
       next: ['Tell me about your experience', 'What tools do you use?'] },
 
     { id: 'risk', keys: ['risk', 'compliance', 'due diligence', 'credentialing', 'verification', 'verify', 'audit', 'discrepancy'],
-      a: 'Due diligence and credentialing are his current focus: document verification, compliance checks, finding risks and discrepancies, and keeping accurate records.',
+      a: 'Due diligence and credentialing are his current line of work, supporting sales teams: verifying documents, researching background information, checking compliance, and using available validation tools to spot discrepancies, so records stay accurate and audit-ready.',
       next: ['Can I see your work history?', 'How can I contact you?'] },
 
     // ---- tools: conversational, grouped by category, bigger picture, no tool names ----
@@ -106,7 +107,7 @@
       next: ['Tell me about your projects', ASK_BUSINESS] },
 
     { id: 'projects', keys: ['project', 'portfolio', 'built', 'build', 'app', 'pdf merger', 'template', 'docx', 'generator', 'extractor', 'telegram', 'receipt', 'dashboard', 'power automate', 'merger', 'merge', 'bot', 'outlook', 'automation', 'integration', 'finance', 'financial', 'workshop', 'smart document'],
-      a: 'Jonnel built <a href="/projects/anyjuanpos">AnyJuanPOS</a>, a web-based point-of-sale and business management app that works offline, syncs, and tracks income and expenses. In the workshop: a working business receipt tracker (a Telegram bot plus web dashboard: send a receipt photo and it is read, saved to a database, and totalled on the dashboard), a Smart Document Processor that reads PDFs, photos and scans and fills reusable templates, an Outlook email template generator (Excel and VBA), a PDF merger planned to grow into a universal document merger, and a Power Automate integration tool. See <a href="/#projects">Projects</a>.',
+      a: 'Jonnel built <a href="/projects/anyjuanpos">AnyJuanPOS</a>, a web-based point-of-sale and business management app that works offline, syncs, and tracks income and expenses. In the workshop: Telegram-Google Workspace Automation (TEGOWA), a working financial automation system (receipts posted in a Telegram group chat are read by Gemini AI, checked by a bot that flags anything needing review, saved to Google Drive and Google Sheets, and shown on a web dashboard), a Smart Document Processor that reads PDFs, photos and scans and fills reusable templates, an Outlook email template generator (Excel and VBA), a PDF merger planned to grow into a universal document merger, and a Power Automate integration tool. See <a href="/#projects">Projects</a>.',
       next: ['Can I try AnyJuanPOS?', ASK_BUSINESS, 'How can I contact you?'] },
 
     { id: 'pos', keys: ['anyjuanpos', 'any juan', 'pos', 'point of sale', 'trial', 'demo', 'test', 'testing', 'try', 'offline', 'pwa', 'install', 'tablet', 'mobile', 'customize', 'customise', 'modify', 'different business', 'any business', 'cashier'],
@@ -115,7 +116,7 @@
 
     // ---- "what slows you down" answers, used after a business is described (and any time) ----
     { id: 'pain-receipts', keys: ['receipt', 'expense', 'bookkeeping', 'accounting', 'sales report', 'receipts and expenses', 'tax'],
-      a: 'For receipts and expenses, the business receipt tracker is the match: send a receipt photo through Telegram and the details are read, saved to a database, and totalled on a dashboard. <a href="/#projects">See Projects</a>.',
+      a: 'For receipts and expenses, <a href="/projects/tegowa">TEGOWA</a> is the match: receipts posted in a Telegram group chat are read by Gemini AI, checked by a bot that flags anything needing review, saved to Google Drive and Sheets, and summarized on a web dashboard. <a href="/#projects">See Projects</a>.',
       next: ['Can I try AnyJuanPOS?', 'How can I contact you?'] },
     { id: 'pain-sales', keys: ['inventory', 'stock', 'sales and stock', 'selling', 'cashier', 'point of sale', 'checkout'],
       a: 'For sales and stock, AnyJuanPOS is built for that: it works offline, syncs when you&rsquo;re back online, and tracks income and expenses. <a href="/projects/anyjuanpos">Project page</a>.',
@@ -136,7 +137,7 @@
       next: ['How does he learn new systems?', 'How does he handle problems?', 'How does he communicate?', 'Is he detail-oriented?'] },
 
     { id: 'p-learn', keys: ['learn', 'learner', 'learning', 'curious', 'curiosity', 'adapt', 'adaptable', 'adaptability', 'new system', 'new tool', 'new software', 'pick up', 'quick learner', 'fast learner', 'grow', 'training', 'keep up', 'ai enthusiast', 'how does he learn'],
-      a: 'He learns by using things. He has worked in many business systems (CRM, ERP, TMS, ticketing) and picked up AI tools to speed up routine work, and he keeps up with AI and automation through courses and videos, then tests what he learns on real tasks so it turns into something useful. With his IT background, when a task keeps coming back he&rsquo;ll build a small tool for it. <a href="/#projects">AnyJuanPOS and the receipt tracker</a> are examples.',
+      a: 'He learns by using things. He has worked in many business systems (CRM, ERP, TMS, ticketing) and picked up AI tools to speed up routine work, and he keeps up with AI and automation through courses and videos, then tests what he learns on real tasks so it turns into something useful. With his IT background, when a task keeps coming back he&rsquo;ll build a small tool for it. <a href="/#projects">AnyJuanPOS and TEGOWA</a> are examples.',
       next: ['What tools do you use?', 'Tell me about your projects', 'How does he handle problems?'] },
 
     { id: 'p-detail', keys: ['detail', 'detail oriented', 'detail-oriented', 'attention to detail', 'careful', 'accurate', 'accuracy', 'mistake', 'error', 'thorough', 'meticulous', 'proofread', 'quality of work'],
@@ -194,10 +195,10 @@
   var BUSINESSES = [
     { id: 'retail', label: 'a retail business',
       keys: ['retail', 'store', 'shop', 'sari sari', 'sari-sari', 'grocery', 'boutique', 'convenience', 'mini mart', 'minimart', 'market', 'merchandise', 'tindahan', 'pharmacy store', 'hardware'],
-      a: 'Retail lives on orders, stock and suppliers showing up on time. Jonnel has coordinated retailers, warehouses and logistics partners and chased late orders to the finish, so he knows where retail operations slip. For the daily work, <a href="/projects/anyjuanpos">AnyJuanPOS</a> (works offline, tracks sales, income and expenses) and the receipt tracker were built with small shops in mind.' },
+      a: 'Retail lives on orders, stock and suppliers showing up on time. Jonnel has coordinated retailers, warehouses and logistics partners and chased late orders to the finish, so he knows where retail operations slip. For the daily work, <a href="/projects/anyjuanpos">AnyJuanPOS</a> (works offline, tracks sales, income and expenses) and <a href="/projects/tegowa">TEGOWA</a> were built with small shops in mind.' },
     { id: 'food', label: 'a food business',
       keys: ['restaurant', 'cafe', 'karinderia', 'carinderia', 'eatery', 'canteen', 'bakery', 'catering', 'food', 'coffee', 'bar', 'resto', 'milk tea', 'diner'],
-      a: 'Jonnel hasn&rsquo;t worked inside a restaurant (that&rsquo;s not on his profile), but the daily problems are familiar ones: sales, supplier deliveries, receipts and expenses, and knowing whether the business is thriving. <a href="/projects/anyjuanpos">AnyJuanPOS</a> and the receipt tracker are built for exactly that kind of small, busy operation.' },
+      a: 'Jonnel hasn&rsquo;t worked inside a restaurant (that&rsquo;s not on his profile), but the daily problems are familiar ones: sales, supplier deliveries, receipts and expenses, and knowing whether the business is thriving. <a href="/projects/anyjuanpos">AnyJuanPOS</a> and <a href="/projects/tegowa">TEGOWA</a> are built for exactly that kind of small, busy operation.' },
     { id: 'logistics', label: 'a logistics or supply chain business',
       keys: ['logistics', 'trucking', 'freight', '3pl', 'warehouse', 'shipping', 'courier', 'supply chain', 'distribution', 'wholesale', 'import', 'export', 'forwarder', 'cargo', 'delivery service', 'distributor'],
       a: 'This is the closest match to his background. Jonnel has worked as a supply chain coordinator: tracking bulk orders end to end, coordinating retailers, warehouses, 3PLs and logistics partners, chasing delays, and securing POD and BOL documents in TMS and supply chain platforms. Many parties touch one order, and he is the person who follows it through.' },
@@ -209,7 +210,7 @@
       a: 'Landlords are among the parties Jonnel has worked with, and the work around property is paperwork-heavy: notices, records, follow-ups and clear communication. He is good at keeping documents organized and every request followed up, and the planned Smart Document Processor and email template tools are aimed at repeated letters and notices.' },
     { id: 'online', label: 'an online selling business',
       keys: ['online', 'ecommerce', 'e-commerce', 'dropship', 'dropshipping', 'reseller', 'online shop', 'online store', 'shopee', 'lazada', 'shopify', 'facebook seller', 'tiktok shop', 'seller', 'live selling'],
-      a: 'Online selling comes down to orders, customer messages and shipments that don&rsquo;t get lost. Jonnel has years of handling order status questions, delays and delivery paperwork, and following up until an issue is closed. (Specific selling platforms aren&rsquo;t on his profile, so I won&rsquo;t claim them.) For sales, stock and expenses, <a href="/projects/anyjuanpos">AnyJuanPOS</a> and the receipt tracker can help.' },
+      a: 'Online selling comes down to orders, customer messages and shipments that don&rsquo;t get lost. Jonnel has years of handling order status questions, delays and delivery paperwork, and following up until an issue is closed. (Specific selling platforms aren&rsquo;t on his profile, so I won&rsquo;t claim them.) For sales, stock and expenses, <a href="/projects/anyjuanpos">AnyJuanPOS</a> and <a href="/projects/tegowa">TEGOWA</a> can help.' },
     { id: 'office', label: 'an office, agency or service business',
       keys: ['agency', 'consulting', 'consultant', 'accounting firm', 'law', 'lawyer', 'office', 'bpo', 'call center', 'startup', 'start up', 'admin', 'freelancer', 'solo', 'small business', 'company', 'service business', 'coach', 'studio', 'school', 'ngo', 'nonprofit'],
       a: 'For office and service businesses, his strengths are the work behind the work: administrative and virtual assistance, clean records and documentation, due diligence and verification, and customer and stakeholder follow-up. He also builds small tools and automations when a task keeps repeating, such as templates for letters and emails.' }

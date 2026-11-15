@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>document.documentElement.classList.add('js');</script>
+
+  <title>Telegram-Google Workspace Automation (TEGOWA) — Project by Jonnel De Chavez</title>
+  <meta name="description" content="A Telegram bot, Google Drive, Google Sheets and Gemini AI working together. Team members post receipts in a group chat, the bot flags anything that needs review, and approved records feed a web dashboard.">
+  <link rel="canonical" href="https://jldechavezworks.com/projects/tegowa">
+  <meta name="theme-color" content="#071b2f">
+
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Telegram-Google Workspace Automation (TEGOWA) — a project by Jonnel De Chavez">
+  <meta property="og:description" content="A Telegram bot, Google Drive, Google Sheets and Gemini AI working together. Team members post receipts in a group chat, the bot flags anything that needs review, and approved records feed a web dashboard.">
+  <meta property="og:url" content="https://jldechavezworks.com/projects/tegowa">
+  <meta property="og:image" content="https://jldechavezworks.com/assets/projects/tegowa-card.webp">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&amp;family=Hanken+Grotesk:wght@400;500;600;700&amp;display=swap">
+  <link rel="stylesheet" href="/css/styles.css?v=8">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="/" aria-label="Jonnel De Chavez — home">
+        <span class="brand-mark" aria-hidden="true">JD</span>
+        <span>Jonnel De Chavez</span>
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+      <nav aria-label="Primary">
+        <ul class="nav-list" id="site-nav">
+          <li><a href="/#about">About</a></li>
+          <li><a href="/#services">Services</a></li>
+          <li><a href="/#projects" aria-current="page">Projects</a></li>
+          <li><a href="/tools">Tools</a></li>
+          <li><a href="/experience">Experience</a></li>
+          <li><a class="nav-cta" href="/#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="wrap">
+      <p class="crumbs"><a href="/">Home</a> / <a href="/#projects">Projects</a> / TEGOWA</p>
+
+      <section class="page-hero" aria-labelledby="title">
+        <span class="badge">Working</span>
+        <h1 id="title" class="pj-h1"><span class="pj-ico pj-ico-lg"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/project-icons.svg#i-tegowa"/></svg></span><span>Telegram-Google Workspace Automation (TEGOWA)</span></h1>
+        <p class="lede">A Telegram group chat that works like a bookkeeping desk. Team members post receipts, AI reads them, the bot flags anything that needs review, and approved records feed a live dashboard.</p>
+
+        <dl class="meta pj-meta3"><div><dt>Status</dt><dd>Working</dd></div><div><dt>Type</dt><dd>Financial automation and management system</dd></div><div><dt>Built with</dt><dd>Telegram Bots, Google Workspace (Google Apps Script, Google Drive and Google Sheets) and Gemini AI</dd></div></dl>
+      </section>
+
+      <figure class="pj-hero">
+        <div class="pj-media"><img src="/assets/projects/tegowa-1-review.webp" width="1500" height="938" alt="A receipt in the Telegram group chat flagged as needing review, with Approve, Reject and View Dashboard buttons"></div>
+        <figcaption>The Telegram bot flags a receipt for review before anything is counted. Sample data from a pretend karinderia.</figcaption>
+      </figure>
+
+      <section class="prose-grid" aria-labelledby="overview">
+        <h2 id="overview">Project overview</h2>
+        <div>
+          <p>Telegram-Google Workspace Automation (TEGOWA) is a financial automation and management system for small businesses. It cuts down manual encoding and repetitive admin work by collecting receipts and transaction records automatically, keeping them in one central place, and keeping an eye on the numbers for the owner.</p>
+          <p>It brings together a Telegram Bot in the business&rsquo;s group chat, Google Workspace powered by Google Apps Script, and Gemini AI, which reads, cleans and organizes the data. Authorized team members post a receipt or record in the chat. The receipt itself is saved in Google Drive, and together with Google Sheets it serves as the business&rsquo;s database.</p>
+          <p>The bot checks every record and tells the team when something looks wrong or needs review, <em>before</em> it is approved or goes any further. It catches duplicate photos, dates that are too old, totals that do not add up, and merchants that do not match the business. Details can be fixed right in the chat with short commands, and a record is only counted in reports once it has been approved.</p>
+          <p>A web dashboard reads the Google Sheets data and turns the approved records into financial summaries and reports. Owners can follow cash flow, revenue, expenses, profitability and overall performance, which makes bookkeeping simpler and helps them make informed decisions.</p>
+        </div>
+      </section>
+
+      <section class="prose-grid" aria-labelledby="what">
+        <h2 id="what">What it tracks</h2>
+        <div><p>Sales, income, expenses, payments, taxes, discounts, service charges and other transactions.</p></div>
+      </section>
+
+      <section class="prose-grid" aria-labelledby="how">
+        <h2 id="how">How it works</h2>
+        <div><ol>
+          <li>An authorized team member posts a receipt or transaction record in the business&rsquo;s Telegram group chat.</li>
+          <li>Gemini AI reads the receipt and organizes the details. The receipt is saved in Google Drive, and the details go into Google Sheets, which together serve as the database.</li>
+          <li>The bot checks the record and tells the team about duplicates, discrepancies or anything that needs review before it is approved.</li>
+          <li>An authorized member fixes any details, then taps Approve or Reject. Only approved records are counted in reports.</li>
+          <li>The web dashboard reads the Google Sheets data and shows summaries and reports.</li>
+        </ol></div>
+      </section>
+
+      <section class="prose-grid" aria-labelledby="shots">
+        <h2 id="shots">Screenshots</h2>
+        <div>
+          <p class="shots-note">Every picture here uses made-up sample data from a pretend karinderia (Marisa Karinderia), never real people, receipts or sales. Click a picture to enlarge it.</p>
+          <div class="gallery shots three">
+            <figure class="shot-fig">
+              <a href="/assets/projects/tegowa-1-review.webp" data-lightbox><img src="/assets/projects/tegowa-1-review.webp" width="1500" height="938" loading="lazy" alt="Needs review. The bot reads the receipt, flags what looks wrong, and waits for someone to Approve or Reject it, or to open the dashboard."></a>
+              <figcaption>Needs review. The bot reads the receipt, flags what looks wrong, and waits for someone to Approve or Reject it, or to open the dashboard.</figcaption>
+            </figure>
+            <figure class="shot-fig">
+              <a href="/assets/projects/tegowa-2-approved.webp" data-lightbox><img src="/assets/projects/tegowa-2-approved.webp" width="1500" height="1029" loading="lazy" alt="Approved. Once checked, the sale is approved, the team is told, and the dashboard link is one tap away."></a>
+              <figcaption>Approved. Once checked, the sale is approved, the team is told, and the dashboard link is one tap away.</figcaption>
+            </figure>
+            <figure class="shot-fig">
+              <a href="/assets/projects/tegowa-3-duplicate.webp" data-lightbox><img src="/assets/projects/tegowa-3-duplicate.webp" width="1500" height="954" loading="lazy" alt="Duplicate and rejected. Sending the same photo twice is caught, /pending lists what is waiting for review, and a rejected receipt is reported back."></a>
+              <figcaption>Duplicate and rejected. Sending the same photo twice is caught, /pending lists what is waiting for review, and a rejected receipt is reported back.</figcaption>
+            </figure>
+            <figure class="shot-fig">
+              <a href="/assets/projects/tegowa-4-dashboard.webp" data-lightbox><img src="/assets/projects/tegowa-4-dashboard.webp" width="1770" height="1650" loading="lazy" alt="Dashboard. Income, expenses, net profit and margin for the period you pick, with a summary and a monthly chart."></a>
+              <figcaption>Dashboard. Income, expenses, net profit and margin for the period you pick, with a summary and a monthly chart.</figcaption>
+            </figure>
+            <figure class="shot-fig">
+              <a href="/assets/projects/tegowa-5-charts.webp" data-lightbox><img src="/assets/projects/tegowa-5-charts.webp" width="1770" height="2013" loading="lazy" alt="Breakdowns. Expenses by category, sales by payment method, biggest suppliers, and where the money goes."></a>
+              <figcaption>Breakdowns. Expenses by category, sales by payment method, biggest suppliers, and where the money goes.</figcaption>
+            </figure>
+            <figure class="shot-fig">
+              <a href="/assets/projects/tegowa-6-records.webp" data-lightbox><img src="/assets/projects/tegowa-6-records.webp" width="1770" height="1634" loading="lazy" alt="Records. Period-by-period totals and every approved transaction, which can be filtered and searched."></a>
+              <figcaption>Records. Period-by-period totals and every approved transaction, which can be filtered and searched.</figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <dialog class="lightbox" id="lightbox" aria-label="Screenshot viewer">
+        <form method="dialog" class="lightbox-close"><button aria-label="Close picture">&times;</button></form>
+        <img alt="">
+        <p class="lightbox-cap"></p>
+      </dialog>
+
+      <section class="prose-grid" aria-labelledby="stand">
+        <h2 id="stand">Where it stands</h2>
+        <div><p><span class="pj-chip working">Working</span></p><p>This system is working.</p></div>
+      </section>
+
+      <div class="page-cta">
+        <h2>Want to know more about TEGOWA, or need something like it?</h2>
+        <a class="btn" href="mailto:jonnel@jldechavezworks.com?subject=TEGOWA%3A%20question">Email me <span class="arrow" aria-hidden="true">&rarr;</span></a>
+      </div>
+
+      <nav class="pj-pn" aria-label="More projects">
+        <a href="/projects/anyjuanpos"><small>&larr; Previous project</small>AnyJuanPOS</a>
+        <a href="/projects/document-processor" class="next"><small>Next project &rarr;</small>Smart Document Processor</a>
+      </nav>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <span>&copy; <span id="year">2026</span> Jonnel De Chavez</span>
+      <span><a href="/#projects">&larr; Back to all projects</a> &middot; <a href="mailto:jonnel@jldechavezworks.com">jonnel@jldechavezworks.com</a> &middot; <a href="tel:+639461301672">0946 130 1672</a></span>
+    </div>
+  </footer>
+
+  <script src="/js/main.js?v=6" defer></script>
+  <script src="/js/chat.js?v=7" defer></script>
+  <script src="/js/gallery.js?v=1" defer></script>
+</body>
+</html>
