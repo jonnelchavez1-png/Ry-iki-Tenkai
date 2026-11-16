@@ -851,3 +851,8 @@ body:has(dialog[open]) { overflow: hidden; }
 .pj-pn a { text-decoration: none; font-weight: 600; max-width: 22rem; }
 .pj-pn a.next { text-align: right; margin-left: auto; }
 .pj-pn small { display: block; font-weight: 500; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; font-size: 0.72rem; }
+
+/* ---- AnyJuanPDF: app icon + wide hero picture (additive) ---- */
+.pj-ico.is-app { border: 0; background: transparent; border-radius: 10px; overflow: hidden; }
+.pj-ico.is-app img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.pj-hero.is-wide .pj-media:not(.is-empty) { aspect-ratio: 1919 / 855; max-width: none; max-height: none; }
