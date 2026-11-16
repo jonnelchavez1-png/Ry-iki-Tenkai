@@ -25,6 +25,7 @@
   var TOOLS = [
     { n: 'Salesforce', cat: 'CRM and customer support', al: ['salesforce'] },
     { n: 'Avaya', cat: 'CRM and customer support', al: ['avaya'] },
+    { n: 'Omnichannel Workspaces', cat: 'CRM and customer support', al: ['omnichannel', 'omni channel'] },
     { n: 'Five9', cat: 'communication and contact center', al: ['five9', 'five 9'] },
     { n: 'ServiceNow', cat: 'CRM and customer support', al: ['servicenow', 'service now'] },
     { n: 'Oracle', cat: 'ERP and business systems', al: ['oracle'] },
@@ -40,26 +41,27 @@
     { n: 'Google Workspace', cat: 'communication and collaboration', al: ['google workspace', 'gsuite', 'g suite', 'gmail', 'google sheets', 'google docs', 'google drive'] },
     { n: 'Citrix Workspace', cat: 'communication and collaboration', al: ['citrix'] },
     { n: 'VMware Horizon', cat: 'communication and collaboration', al: ['vmware', 'horizon'] },
-    { n: 'Excel (PivotTables, basic VBA)', cat: 'productivity and documentation', al: ['excel', 'vba', 'pivottable', 'pivot'] },
+    { n: 'Excel (PivotTables, VLOOKUP, XLOOKUP, VBA macros)', cat: 'productivity and documentation', al: ['excel', 'vba', 'macro', 'macros', 'pivottable', 'pivot', 'vlookup', 'xlookup', 'lookup'] },
     { n: 'Word', cat: 'productivity and documentation', al: ['word', 'ms word'] },
     { n: 'Access', cat: 'productivity and documentation', al: ['access', 'ms access'] },
     { n: 'Power Platform / Power Automate', cat: 'automation and AI', al: ['power platform', 'power automate', 'power apps', 'powerapps'] },
     { n: 'Copilot Studio', cat: 'automation and AI', al: ['copilot studio'] },
     { n: 'Google Apps Script', cat: 'automation and AI', al: ['apps script', 'appscript', 'google apps script'] },
     { n: 'Claude, ChatGPT, Gemini and Copilot', cat: 'automation and AI', al: ['claude', 'chatgpt', 'chat gpt', 'gemini', 'copilot', 'openai'] },
+    { n: 'Python', cat: 'building small tools', al: ['python'] },
     { n: 'JavaScript, HTML/CSS and VS Code', cat: 'building small tools', al: ['javascript', 'html', 'css', 'vs code', 'vscode', 'visual studio code', 'notepad'] },
     { n: 'C++ and Laravel (basic level)', cat: 'building small tools', al: ['c++', 'laravel', 'php'] },
     { n: 'Telegram Bot API', cat: 'automation and AI', al: ['telegram'] }
   ];
 
   var namesByCategoryHtml =
-    '<strong>CRM and customer support:</strong> Salesforce, Avaya, ServiceNow.<br>' +
+    '<strong>CRM and customer support:</strong> Salesforce, Avaya, Omnichannel Workspaces, ServiceNow.<br>' +
     '<strong>ERP and business systems:</strong> Oracle, Workday, Kronos.<br>' +
     '<strong>TMS and supply chain:</strong> E2open, BluJay, OpenDock.<br>' +
     '<strong>Communication and collaboration:</strong> Five9 (contact center), Slack, Lark, Confluence, Microsoft 365, Google Workspace, Citrix and VMware Horizon.<br>' +
-    '<strong>Productivity and documentation:</strong> Excel (PivotTables, basic VBA), Word, Access.<br>' +
-    '<strong>Automation and AI:</strong> Power Platform, Copilot Studio, Google Apps Script, Claude, ChatGPT, Gemini, Copilot.<br>' +
-    '<strong>Small tools:</strong> JavaScript, HTML/CSS, VS Code; C++ and Laravel at a basic level.';
+    '<strong>Productivity and documentation:</strong> Excel (PivotTables, VLOOKUP, XLOOKUP, VBA macros), Word, Access.<br>' +
+    '<strong>Automation and AI:</strong> Power Platform (including Power Apps), Copilot Studio, Google Apps Script, Claude, ChatGPT, Gemini, Copilot. He is planning to learn n8n.<br>' +
+    '<strong>Small tools:</strong> Python, JavaScript, HTML/CSS, VS Code; C++ and Laravel at a basic level.';
 
   // ---------------------------------------------------------------------------------------------
   // Topics. keys: words / phrases that trigger the topic (plurals and small typos are handled).
@@ -75,7 +77,7 @@
       next: ['What services do you offer?', 'What tools do you use?', ASK_BUSINESS] },
 
     { id: 'services', keys: ['service', 'offer', 'help with', 'what do you do', 'what can you do', 'support', 'virtual assistant', 'admin', 'assist', 'can you help', 'how can you help'],
-      a: 'Jonnel helps with: administrative and virtual assistance; data management and documentation; order and supply chain coordination; due diligence, credentialing and risk review; customer, sales and stakeholder support; digital tools, AI and automation; and healthcare and insurance claims support. Details are in the <a href="/#services">Services</a> section. Tell me what your business does and I can point to the part that fits.',
+      a: 'Jonnel helps with: due diligence, credentialing and risk review (his current focus); administrative and virtual assistance; data management and documentation; order and supply chain coordination; customer, sales and stakeholder support; digital tools, AI and automation; and healthcare and insurance claims support. Details are in the <a href="/#services">Services</a> section. Tell me what your business does and I can point to the part that fits.',
       next: [ASK_BUSINESS, 'Do you do data entry?', 'Supply chain experience?'] },
 
     { id: 'experience', keys: ['experience', 'background', 'years', 'career', 'history', 'worked', 'work history', 'resume', 'cv', 'confidential', 'employer', 'company', 'previous', 'where did you work', 'current role', 'current job', 'currently', 'seasoned', 'senior'],
@@ -83,11 +85,11 @@
       next: ['What tools do you use?', ASK_BUSINESS] },
 
     { id: 'supply', keys: ['supply chain', 'logistic', 'order', 'warehouse', 'pod', 'bol', 'bill of lading', 'proof of delivery', 'coordinator', 'shipping', 'shipment', 'delivery', 'supplier', 'freight', '3pl', 'tms'],
-      a: 'Yes. Jonnel has worked as a supply chain coordinator: tracking bulk orders end to end, coordinating retailers, warehouses and logistics partners, chasing delays, and securing PODs and BOLs so suppliers and customers get accurate information on time.',
+      a: 'Yes. Jonnel has worked as a supply chain coordinator: following bulk orders, coordinating retailers, warehouses and logistics partners, chasing delays, and securing POD and BOL documents in TMS, ERP and supply chain platforms so suppliers and customers get accurate information on time.',
       next: ['What tools do you use?', ASK_BUSINESS] },
 
     { id: 'data', keys: ['data entry', 'data', 'encoding', 'encoder', 'spreadsheet', 'record', 'documentation', 'clean', 'proofread', 'scan', 'paperwork'],
-      a: 'Yes. Jonnel started in data encoding and later worked as a data assistant reviewing insurance claims: entering, validating and proofreading data, and turning scanned paper into clean digital records. He also builds Excel reports with PivotTables.',
+      a: 'Yes. Jonnel started in data encoding and later worked as a data assistant reviewing insurance claims: entering, validating and proofreading data, and turning scanned paper into clean digital records. His data entry spans systems such as TMS, ERP and mostly CRM. In Excel he works with PivotTables, VLOOKUP, XLOOKUP and VBA macros.',
       next: ['Tell me about your experience', 'What tools do you use?'] },
 
     { id: 'risk', keys: ['risk', 'compliance', 'due diligence', 'credentialing', 'verification', 'verify', 'audit', 'discrepancy'],
@@ -204,7 +206,7 @@
       a: 'This is the closest match to his background. Jonnel has worked as a supply chain coordinator: tracking bulk orders end to end, coordinating retailers, warehouses, 3PLs and logistics partners, chasing delays, and securing POD and BOL documents in TMS and supply chain platforms. Many parties touch one order, and he is the person who follows it through.' },
     { id: 'health', label: 'a healthcare or insurance business',
       keys: ['clinic', 'hospital', 'doctor', 'medical', 'dental', 'dentist', 'pharmacy', 'health', 'healthcare', 'insurance', 'claims', 'hmo', 'laboratory', 'therapy', 'nursing', 'patient'],
-      a: 'Healthcare and insurance are a big part of his background. He has coordinated with hospitals, doctors and internal teams, handled claims filing and validation, and reviewed claim forms and invoices for completeness, justification and authenticity. He also treats sensitive information, including HIPAA-protected data, with care, so confidentiality isn&rsquo;t a worry.' },
+      a: 'Healthcare and insurance are a big part of his background. He has coordinated with hospitals, doctors and internal teams, handled claims filing and validation, and reviewed claim forms and invoices for completeness, justification and authenticity. Related areas on his profile are customer service, policy and eligibility review, and HIPAA and the Privacy Act. He also treats sensitive information, including HIPAA-protected data, with care, so confidentiality isn&rsquo;t a worry.' },
     { id: 'property', label: 'a property or rental business',
       keys: ['landlord', 'property', 'real estate', 'rental', 'apartment', 'tenant', 'lease', 'condo', 'realty', 'broker', 'boarding house', 'dorm'],
       a: 'Landlords are among the parties Jonnel has worked with, and the work around property is paperwork-heavy: notices, records, follow-ups and clear communication. He is good at keeping documents organized and every request followed up, and the planned Smart Document Processor and email template tools are aimed at repeated letters and notices.' },
@@ -286,6 +288,9 @@
     if (m) {
       var subj = ' ' + m[1].replace(/[?!.]+$/, '').trim() + ' ';
       var hit = TOOLS.filter(function (t) { return t.al.some(function (a) { return subj.indexOf(' ' + a + ' ') !== -1 || (a.length > 4 && subj.indexOf(a) !== -1); }); });
+      if (/\bn8n\b/.test(subj)) {
+        return { html: 'Not yet. Jonnel is planning to learn n8n. For simple automation he currently uses Google Workspace and Apps Script, Python and JavaScript, with the help of AI.', next: ['What tools do you use?', ASK_BUSINESS] };
+      }
       if (hit.length) {
         var line = hit.map(function (t) { return '<strong>' + t.n + '</strong> (' + t.cat + ')'; }).join(', ');
         return { html: 'Yes, that&rsquo;s on his profile: ' + line + '. More detail is shared on request: <a href="/tools">tools page</a>.', next: ['Which specific systems?', ASK_BUSINESS] };
