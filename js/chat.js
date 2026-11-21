@@ -77,7 +77,7 @@
       next: ['What services do you offer?', 'What tools do you use?', ASK_BUSINESS] },
 
     { id: 'services', keys: ['service', 'offer', 'help with', 'what do you do', 'what can you do', 'support', 'virtual assistant', 'admin', 'assist', 'can you help', 'how can you help'],
-      a: 'Jonnel helps with: due diligence, credentialing and risk review (his current focus); administrative and virtual assistance; data management and documentation; order and supply chain coordination; customer, sales and stakeholder support; digital tools, AI and automation; and healthcare and insurance claims support. Details are in the <a href="/#services">Services</a> section. Tell me what your business does and I can point to the part that fits.',
+      a: 'Jonnel helps with: due diligence, credentialing and risk review (his current area of work); administrative and virtual assistance; data management and documentation; order and supply chain coordination; customer, sales and stakeholder support; digital tools, AI and automation; and healthcare and insurance claims support. Details are in the <a href="/#services">Services</a> section. Tell me what your business does and I can point to the part that fits.',
       next: [ASK_BUSINESS, 'Do you do data entry?', 'Supply chain experience?'] },
 
     { id: 'experience', keys: ['experience', 'background', 'years', 'career', 'history', 'worked', 'work history', 'resume', 'cv', 'confidential', 'employer', 'company', 'previous', 'where did you work', 'current role', 'current job', 'currently', 'seasoned', 'senior'],
