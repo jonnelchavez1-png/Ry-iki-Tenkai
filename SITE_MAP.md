@@ -19,7 +19,7 @@ Read this first. Open only the file the request touches.
 - Tools, Experience, Contact (see file)
 
 ## More projects carousel order
-1. AnyCALENDARIO  -> /projects/anycalendario
+1. AnyJuanMEET  -> /projects/anyjuanmeet (old /projects/anycalendario redirects here via _redirects)
 2. TEGOWA  -> /projects/tegowa
 3. Smart Document Processor  -> /projects/document-processor
 4. AnyJuandraft  -> /projects/anyjuandraft (old /projects/outlook-email-templates redirects here via _redirects)
@@ -28,7 +28,7 @@ Read this first. Open only the file the request touches.
 7. More small tools  -> /projects/small-tools
 
 Prev/Next links at the bottom of each project page (`nav.pj-pn`) follow this order.
-AnyJuanPOS (featured) has no prev/next; AnyCALENDARIO's "previous" points to it and small-tools' "next" points to it.
+AnyJuanPOS (featured) has no prev/next; AnyJuanMEET's "previous" points to it and small-tools' "next" points to it.
 Also exists: projects/allaboutpdf.html, projects/retailer-pos.html (not in carousel).
 
 ## CSS / JS
@@ -44,10 +44,10 @@ Also exists: projects/allaboutpdf.html, projects/retailer-pos.html (not in carou
 (Jonnel to fill: anything that must not change without explicit approval.)
 
 ## Pending
-- AnyCALENDARIO page: status badge, Status/Type/Built with row, hero image, What it does, Why, Where it stands, screenshots (TODO comments in projects/anycalendario.html).
-- AnyCALENDARIO card image: currently icon placeholder.
+- AnyJuanMEET: send the SVG logo for a sharper icon (current one is cropped from a screenshot). Add a live demo link if one should be public.
 - Confirm 2026-11-22 changes work after upload.
 
 ## Log
+- 2026-11-27: AnyCALENDARIO replaced by AnyJuanMEET (page, 8 screenshots with personal details hidden, card, redirect).
 - 2026-11-25: Outlook email template generator replaced by AnyJuandraft (card, page, 6 screenshots, icon, redirects, links).
 - 2026-11-22: Card iv diagram made circular; "Current focus" -> "Current area"; "Currently learning" -> "Ongoing development"; AnyCALENDARIO added first in carousel + stub page; SITE_MAP.md created.

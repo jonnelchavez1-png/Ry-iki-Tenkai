@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>document.documentElement.classList.add('js');</script>
+
+  <title>AnyJuanMEET — Project by Jonnel De Chavez</title>
+  <meta name="description" content="A web-based scheduling platform where guests pick a date, time and meeting length, and the host approves or declines requests from an admin dashboard.">
+  <link rel="canonical" href="https://jldechavezworks.com/projects/anyjuanmeet">
+  <meta name="theme-color" content="#071b2f">
+
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="AnyJuanMEET — a project by Jonnel De Chavez">
+  <meta property="og:description" content="A web-based scheduling platform where guests pick a date, time and meeting length, and the host approves or declines requests from an admin dashboard.">
+  <meta property="og:url" content="https://jldechavezworks.com/projects/anyjuanmeet">
+  <meta property="og:image" content="https://jldechavezworks.com/assets/anyjuanmeet-card.webp">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&amp;family=Hanken+Grotesk:wght@400;500;600;700&amp;display=swap">
+  <link rel="stylesheet" href="/css/styles.css?v=20261127">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="/" aria-label="Jonnel De Chavez — home">
+        <span class="brand-mark" aria-hidden="true">JD</span>
+        <span>Jonnel De Chavez</span>
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+      <nav aria-label="Primary">
+        <ul class="nav-list" id="site-nav">
+          <li><a href="/#about">About</a></li>
+          <li><a href="/#services">Services</a></li>
+          <li><a href="/#projects" aria-current="page">Projects</a></li>
+          <li><a href="/tools">Tools</a></li>
+          <li><a href="/experience">Experience</a></li>
+          <li><a class="nav-cta" href="/#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="wrap">
+      <p class="crumbs"><a href="/">Home</a> / <a href="/#projects">Projects</a> / AnyJuanMEET</p>
+
+      <section class="page-hero" aria-labelledby="title">
+        <span class="badge">Working</span>
+        <h1 id="title" class="pj-h1"><span class="pj-ico pj-ico-lg is-app"><img src="/assets/anyjuanmeet-icon.png" width="96" height="96" alt=""></span><span>AnyJuanMEET</span></h1>
+        <p class="lede">Appointment booking and scheduling system. Guests check available dates and times and send a booking request, and the host approves or declines it from an admin dashboard.</p>
+
+        <dl class="meta pj-meta3"><div><dt>Status</dt><dd>Working, still being improved</dd></div><div><dt>Type</dt><dd>Web app, calendar and booking management</dd></div><div><dt>Access</dt><dd>Email me for a demo</dd></div></dl>
+      </section>
+
+      <figure class="pj-hero is-wide">
+        <div class="pj-media"><img src="/assets/anyjuanmeet-1-guest-booking.webp" width="1250" height="866" alt="AnyJuanMEET guest booking page with a month calendar, available days, meeting length choices and a list of available times"></div>
+        <figcaption>The guest view. Pick a meeting length, a date and a time.</figcaption>
+      </figure>
+
+      <section class="prose-grid" aria-labelledby="overview">
+        <h2 id="overview">Project overview</h2>
+        <div>
+          <p>AnyJuanMEET is a web-based scheduling platform where guests can check available dates and time slots, choose a meeting duration, and submit booking requests. The host can review, approve, or decline requests through an admin dashboard, while guests receive email updates and a link to manage, reschedule, or cancel their bookings.</p>
+          <p>The system also includes calendar-based booking management, availability controls, and date blocking to make scheduling easier and more organized. It works like a Calendly-style booking page, built around a request-and-approve flow, so the host stays in control of who gets a slot.</p>
+          <p>It is working today and I am still improving it, with more features and polish planned.</p>
+        </div>
+      </section>
+
+      <section class="prose-grid" aria-labelledby="what">
+        <h2 id="what">What it can do</h2>
+        <div>
+          <p><strong>For guests</strong></p>
+          <ul>
+            <li>See live availability on a month calendar and pick a day and time.</li>
+            <li>Choose a meeting length: 15, 30 or 60 minutes.</li>
+            <li>Send a request with a name, email, optional phone number and an optional note. No verification email is needed.</li>
+            <li>Get email updates when the request is approved or declined, plus a link to manage, reschedule or cancel the booking.</li>
+            <li>Use light or dark mode. Times are shown in the host&rsquo;s time zone.</li>
+          </ul>
+          <p><strong>For the host</strong></p>
+          <ul>
+            <li>See totals for bookings, requests awaiting approval, confirmed meetings and today&rsquo;s meetings.</li>
+            <li>Approve or decline requests, and search or filter all bookings by guest or status.</li>
+            <li>View every booking on a calendar, colour-coded as confirmed, awaiting approval, blocked or other.</li>
+            <li>Block single dates or ranges for holidays and days off, so they cannot be booked.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="prose-grid" aria-labelledby="how">
+        <h2 id="how">How it works</h2>
+        <div><ol>
+          <li>A guest opens the booking page and picks a meeting length, a date and a time.</li>
+          <li>They add their details and send the request.</li>
+          <li>The host reviews it in the admin dashboard and approves or declines it.</li>
+          <li>The guest gets an email with the result and a link to manage, reschedule or cancel.</li>
+        </ol></div>
+      </section>
+
+      <section class="prose-grid" aria-labelledby="shots">
+        <h2 id="shots">Screenshots</h2>
+        <div>
+          <p class="shots-note">Names, emails and phone numbers in these pictures are test entries, and personal details have been hidden. Click a picture to enlarge it.</p>
+          <h3 class="shots-sub" style="margin-top:0">Guest view</h3>
+          <div class="gallery shots fit">
+            <figure class="shot-fig">
+              <a href="/assets/anyjuanmeet-1-guest-booking.webp" data-lightbox><img src="/assets/anyjuanmeet-1-guest-booking.webp" width="1250" height="866" loading="lazy" alt="AnyJuanMEET guest booking page with a month calendar, available days, meeting length choices and a list of available times"></a>
+              <figcaption>Guest view. Pick a meeting length, then a date and time from the live availability.</figcaption>
+            </figure>
+            <figure class="shot-fig">
+              <a href="/assets/anyjuanmeet-2-guest-details.webp" data-lightbox><img src="/assets/anyjuanmeet-2-guest-details.webp" width="1106" height="735" loading="lazy" alt="AnyJuanMEET guest details form asking for name, email, optional phone and an optional note"></a>
+              <figcaption>Guest view. Add your details and send the request. No verification email is needed.</figcaption>
+            </figure>
+            <figure class="shot-fig">
+              <a href="/assets/anyjuanmeet-3-guest-submitted.webp" data-lightbox><img src="/assets/anyjuanmeet-3-guest-submitted.webp" width="685" height="866" loading="lazy" alt="AnyJuanMEET confirmation screen saying the booking request was submitted and is waiting for the host"></a>
+              <figcaption>Guest view. The request is received and waits for the host to review it.</figcaption>
+            </figure>
+            <figure class="shot-fig">
+              <a href="/assets/anyjuanmeet-4-guest-dark.webp" data-lightbox><img src="/assets/anyjuanmeet-4-guest-dark.webp" width="1281" height="879" loading="lazy" alt="AnyJuanMEET guest booking page in dark mode with a time slot selected"></a>
+              <figcaption>Guest view. Light and dark mode are both available.</figcaption>
+            </figure>
+          </div>
+          <h3 class="shots-sub">Admin dashboard</h3>
+          <div class="gallery shots fit">
+            <figure class="shot-fig">
+              <a href="/assets/anyjuanmeet-5-admin-overview.webp" data-lightbox><img src="/assets/anyjuanmeet-5-admin-overview.webp" width="1287" height="882" loading="lazy" alt="AnyJuanMEET admin overview showing booking totals and a list of recent bookings with approve and decline buttons"></a>
+              <figcaption>Admin. The overview shows totals and the latest requests, with Approve and Decline buttons.</figcaption>
+            </figure>
+            <figure class="shot-fig">
+              <a href="/assets/anyjuanmeet-6-admin-calendar.webp" data-lightbox><img src="/assets/anyjuanmeet-6-admin-calendar.webp" width="1136" height="895" loading="lazy" alt="AnyJuanMEET admin calendar showing bookings by day in colours for confirmed and awaiting approval"></a>
+              <figcaption>Admin. A calendar of all bookings, colour-coded by status, with a detail panel for the selected day.</figcaption>
+            </figure>
+            <figure class="shot-fig">
+              <a href="/assets/anyjuanmeet-7-admin-block-dates.webp" data-lightbox><img src="/assets/anyjuanmeet-7-admin-block-dates.webp" width="1172" height="439" loading="lazy" alt="AnyJuanMEET admin form for blocking dates and holidays, with a list of blocked dates"></a>
+              <figcaption>Admin. Block single dates or a range for holidays and days off.</figcaption>
+            </figure>
+            <figure class="shot-fig">
+              <a href="/assets/anyjuanmeet-8-admin-bookings.webp" data-lightbox><img src="/assets/anyjuanmeet-8-admin-bookings.webp" width="1159" height="552" loading="lazy" alt="AnyJuanMEET admin bookings list with search and a status filter"></a>
+              <figcaption>Admin. Search by guest name or email, filter by status, and approve or decline.</figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <dialog class="lightbox" id="lightbox" aria-label="Screenshot viewer">
+        <form method="dialog" class="lightbox-close"><button aria-label="Close picture">&times;</button></form>
+        <img alt="">
+        <p class="lightbox-cap"></p>
+      </dialog>
+
+      <section class="prose-grid" aria-labelledby="stand">
+        <h2 id="stand">Where it stands</h2>
+        <div><p><span class="pj-chip working">Working</span></p><p>AnyJuanMEET is working and in use for testing. I am still developing it to make it better, so features and screens will keep improving. For a demo, email me.</p></div>
+      </section>
+
+      <div class="page-cta">
+        <h2>Want a demo of AnyJuanMEET, or need booking and scheduling made simpler?</h2>
+        <a class="btn" href="mailto:jonnel@jldechavezworks.com?subject=AnyJuanMEET%3A%20demo">Email me <span class="arrow" aria-hidden="true">&rarr;</span></a>
+      </div>
+
+      <nav class="pj-pn" aria-label="More projects">
+        <a href="/projects/anyjuanpos"><small>&larr; Previous project</small>AnyJuanPOS</a>
+        <a href="/projects/tegowa" class="next"><small>Next project &rarr;</small>Telegram-Google Workspace Automation (TEGOWA)</a>
+      </nav>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <span>&copy; <span id="year">2026</span> Jonnel De Chavez</span>
+      <span><a href="/#projects">&larr; Back to all projects</a> &middot; <a href="mailto:jonnel@jldechavezworks.com">jonnel@jldechavezworks.com</a> &middot; <a href="tel:+639461301672">0946 130 1672</a></span>
+    </div>
+  </footer>
+
+  <script src="/js/main.js?v=6" defer></script>
+  <script src="/js/chat.js?v=9" defer></script>
+  <script src="/js/gallery.js?v=1" defer></script>
+</body>
+</html>
