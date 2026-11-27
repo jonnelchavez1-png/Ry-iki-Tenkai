@@ -21,7 +21,7 @@ Read this first. Open only the file the request touches.
 ## More projects carousel order
 1. AnyJuanMEET  -> /projects/anyjuanmeet (old /projects/anycalendario redirects here via _redirects)
 2. TEGOWA  -> /projects/tegowa
-3. Smart Document Processor  -> /projects/document-processor
+3. AnyJuanCLERK  -> /projects/anyjuanclerk (old /projects/document-processor redirects here via _redirects)
 4. AnyJuandraft  -> /projects/anyjuandraft (old /projects/outlook-email-templates redirects here via _redirects)
 5. AnyJuanPDF  -> /projects/anyjuanpdf
 6. Automation & integration tool  -> /projects/automation-integration
@@ -48,6 +48,7 @@ Also exists: projects/allaboutpdf.html, projects/retailer-pos.html (not in carou
 - Confirm 2026-11-22 changes work after upload.
 
 ## Log
+- 2026-11-28: Smart Document Processor replaced by AnyJuanCLERK (page, 5 screenshots with sample data only, hero, card, icon, redirect, links, chatbot text). AI check is not connected yet, so the copy says so.
 - 2026-11-27: AnyCALENDARIO replaced by AnyJuanMEET (page, 8 screenshots with personal details hidden, card, redirect).
 - 2026-11-25: Outlook email template generator replaced by AnyJuandraft (card, page, 6 screenshots, icon, redirects, links).
 - 2026-11-22: Card iv diagram made circular; "Current focus" -> "Current area"; "Currently learning" -> "Ongoing development"; AnyCALENDARIO added first in carousel + stub page; SITE_MAP.md created.
