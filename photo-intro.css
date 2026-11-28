@@ -1,0 +1,43 @@
+/* Photo intro (About section): warp tunnel, burst, full-screen collage, one-by-one dissolve to the final portrait.
+   Markup is built by js/photo-intro.js. Everything is scoped to .photo-intro / .pi-*
+   Dark navy and gold on purpose: it is a cinematic stage inside the light page. */
+.photo-intro {
+  --pi-ink: #f4efe4; --pi-accent: #d0ab59; --pi-soft: #b9c2d0; --pi-line: #1b2a40;
+  container-type: inline-size; position: relative; isolation: isolate; overflow: hidden;
+  width: 100%; aspect-ratio: 16 / 9; margin-top: clamp(2.5rem, 5vw, 4rem);
+  background: #050b15; border-radius: 2px;
+  box-shadow: inset 0 0 0 1px rgba(255, 235, 200, 0.07);
+}
+.photo-intro.is-portrait { aspect-ratio: 9 / 13; max-width: 520px; margin-inline: auto; }
+.photo-intro canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+.pi-cap { position: absolute; z-index: 3; pointer-events: none; color: var(--pi-ink); text-shadow: 0 2px 22px rgba(0, 0, 0, .65); }
+.pi-ln { display: block; overflow: hidden; white-space: nowrap; padding-block: .06em; }
+.pi-ln > b { display: block; font-weight: 500; transform: translateY(112%); }
+.pi-nm { font: 500 clamp(1.6rem, 4.3cqw, 3.4rem)/1.04 var(--font-display, Georgia, serif); letter-spacing: .13em; text-transform: uppercase; }
+.photo-intro.is-portrait .pi-nm { font-size: clamp(1.5rem, 8.6cqw, 3rem); }
+.pi-rule { height: 1px; width: 0; background: var(--pi-accent); margin: clamp(10px, 2vw, 22px) 0; transition: width 1s cubic-bezier(.2,.7,.1,1) .55s; }
+.pi-rl { display: flex; align-items: center; flex-wrap: wrap; gap: .5em 1.1em; font: 600 clamp(.58rem, 1.15cqw, .8rem)/1.2 var(--font-body, system-ui, sans-serif); letter-spacing: .3em; text-transform: uppercase; color: var(--pi-soft); opacity: 0; transform: translateY(8px); transition: opacity .9s ease .85s, transform .9s cubic-bezier(.2,.7,.1,1) .85s; }
+.pi-rl i { width: 1px; height: 1.25em; background: var(--pi-accent); display: inline-block; }
+.pi-cap.show .pi-ln > b { transform: none; transition: transform 1s cubic-bezier(.2,.7,.1,1); }
+.pi-cap.show .pi-ln:nth-child(2) > b { transition-delay: .14s; }
+.pi-cap.show .pi-rule { width: clamp(44px, 7vw, 84px); }
+.pi-cap.show .pi-rl { opacity: 1; transform: none; }
+.photo-intro.is-portrait .pi-rl { flex-direction: column; align-items: flex-start; gap: .55em; }
+.photo-intro.is-portrait .pi-rl i { display: none; }
+
+.pi-hud { position: absolute; left: 12px; bottom: 12px; z-index: 4; display: flex; gap: 8px; flex-wrap: wrap; }
+.photo-intro.is-portrait .pi-hud { bottom: auto; top: 10px; }
+.pi-pill {
+  appearance: none; border: 1px solid rgba(255, 255, 255, .26); background: rgba(5, 11, 21, .62); color: #dbe4f0;
+  font: 600 11px/1 var(--font-body, system-ui, sans-serif); letter-spacing: .14em; text-transform: uppercase;
+  padding: 9px 13px; border-radius: 999px; cursor: pointer; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+}
+.pi-pill:hover { border-color: var(--pi-accent); color: #fff; }
+.pi-pill:focus-visible { outline: 2px solid #f1d58a; outline-offset: 2px; }
+.pi-status { position: absolute; inset: 0; z-index: 2; display: grid; place-items: center; color: #8d9db3; font: 600 12px/1 var(--font-body, system-ui, sans-serif); letter-spacing: .2em; text-transform: uppercase; }
+.pi-status[hidden] { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  .pi-ln > b, .pi-rule, .pi-rl { transition: none; }
+  .pi-hud { display: none; }
+}
